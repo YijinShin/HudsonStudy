@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "302487519731",
+    "project_id": "hudsonstudy",
+    "storage_bucket": "hudsonstudy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:302487519731:android:437fd3306a9ed4dc56d286",
+        "android_client_info": {
+          "package_name": "com.example.hudsonstudy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "302487519731-f93o1a8mh34a9ushqk6rcsb8o4v2a5i0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9i5UN7_P4J9AZna1LEPgtcy3dXo8l4uA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "302487519731-f93o1a8mh34a9ushqk6rcsb8o4v2a5i0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
