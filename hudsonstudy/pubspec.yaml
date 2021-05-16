@@ -32,4 +32,7 @@ flutter:
   assets:
     - assets/background1.jpg
     - assets/background2.png
+    - assets/background3.jpg
+    - assets/background4.jpg
+    - assets/title.png
 

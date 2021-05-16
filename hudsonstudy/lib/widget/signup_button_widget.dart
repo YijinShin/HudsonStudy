@@ -10,27 +10,26 @@ class GoogleSignupButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: EdgeInsets.fromLTRB(80,50,80,0),
     child: RaisedButton(
-      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
+      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(8.0)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.red,
+              color: Colors.white,
               borderRadius: BorderRadius.circular(5.0)
             ),
             width: 50,
             height: 50,
-            child: Icon(FontAwesomeIcons.google,color: Colors.white),
+            child: Icon(FontAwesomeIcons.google,color: Colors.black),
           ),
           SizedBox(width:20),
-          Text('GOOGLE'),
+          Text('GOOGLE sign in'),
         ],
       ),
-      textColor: Colors.white,
-      color: Colors.redAccent[100],
+      textColor: Colors.black,
+      color: Colors.white60,
       onPressed: (){
-        print('google sign in');
         final provider = Provider.of<ApplicationStateProvider>(context, listen:false);
         provider.signInWithGoogle();
       },

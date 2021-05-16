@@ -8,7 +8,14 @@ class StartPage extends StatelessWidget {
           Container(
               width: MediaQuery.of(context).size.width ,
               child: Image.asset(
-              'assets/background1.jpg',
+              'assets/background4.jpg',
+              fit:BoxFit.cover,
+            ),
+          ),
+          Container(
+              width: MediaQuery.of(context).size.width ,
+              child: Image.asset(
+              'assets/title.png',
               fit:BoxFit.cover,
             ),
           ),
