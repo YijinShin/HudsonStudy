@@ -1,13 +1,15 @@
 import 'dart:io';
 import 'package:intl/intl.dart';
-//import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-//import 'package:image_picker/image_picker.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async'; //StreamSubscription 을 사용하기 위해 
+
+//model
+import 'package:hudsonstudy/model/study.dart';
+import 'package:hudsonstudy/model/user.dart';
 
 enum ApplicationLoginState {
   loggedOut,
@@ -19,19 +21,84 @@ enum ApplicationLoginState {
 
 
 class ApplicationStateProvider extends ChangeNotifier{
-
+  
+  //-------------------- initialize --------------------
   //생성자.
   ApplicationStateProvider(){
     init(); //초기에는 false로 초기화
   }
 
    Future<void> init() async {
-    _isSigningIn = false;
-   
+      _isSigningIn = false;
+      FirebaseAuth.instance.userChanges().listen((user) {
+          //로그인이 되어있는 상태 
+          if(user != null){
+            _loginState = ApplicationLoginState.loggedIn; 
+            _studySubscription = 
+              FirebaseFirestore.instance
+                .collection('study')
+                .snapshots()
+                .listen((snapshot) { 
+                  _study = [];
+                  snapshot.docs.forEach((document) { 
+                    _study.add(
+                      Study(
+                        id: document.data()['id'],
+                        name: document.data()['name'],
+                        price: document.data()['price'],
+                        description: document.data()['description'],
+                        thumb: document.data()['thnmb'],
+                        photoURL: document.data()['photoURL'],
+                        photoName: document.data()['photoName'],
+                        userId: document.data()['userId'],
+                      ),
+                    );
+                  });
+                }); 
+            _appUserSubscription = 
+              FirebaseFirestore.instance
+                .collection('appUser')
+                .snapshots()
+                .listen((snapshot) { 
+                  _appUser = [];
+                  snapshot.docs.forEach((document) { 
+                    _appUser.add(
+                      AppUser(
+                        email: document.data()['id'],
+                        firstname: document.data()['firstname'],
+                        surename: document.data()['surename'],
+                        major: document.data()['major'],
+                        contect: document.data()['contect'],
+                      ),
+                    );
+                  });
+                }); 
+            notifyListeners();              
+          }
+          //로그인이 안되어있는 상태 
+          else{
+            _loginState = ApplicationLoginState.loggedOut; 
+            _study = [];
+            _studySubscription?.cancel();
+            _appUser = [];
+            _appUserSubscription?.cancel();
+            notifyListeners();
+          }
+        });
    }
 
+  //-------------------- cloud storage --------------------
+  //study collection
+  StreamSubscription<QuerySnapshot> _studySubscription; 
+  List<Study> _study = [];
+  List<Study> get study => _study;
+  //appuser collection 
+  StreamSubscription<QuerySnapshot> _appUserSubscription; 
+  List<AppUser> _appUser = [];
+  List<AppUser> get appUser => _appUser;
+
   
-  //-------------------- sign up --------------------
+  //-------------------- authentication --------------------
   ApplicationLoginState _loginState = ApplicationLoginState.loggedOut; //기본적으로는 로그아웃 상태
   ApplicationLoginState get loginState => _loginState; 
 
