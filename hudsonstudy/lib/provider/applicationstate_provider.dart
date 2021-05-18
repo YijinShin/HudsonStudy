@@ -72,7 +72,7 @@ class ApplicationStateProvider extends ChangeNotifier{
                   snapshot.docs.forEach((document) { 
                     _appUser.add(
                       AppUser(
-                        email: document.data()['id'],
+                        userId: document.data()['userId'],
                         firstName: document.data()['firstName'],
                         sureName: document.data()['sureName'],
                         major: document.data()['major'],
@@ -147,12 +147,12 @@ class ApplicationStateProvider extends ChangeNotifier{
       major = document.data()['major'];
       contect = document.data()['contect'];
     });
-
+    //study colleciton에 study 추가 
     studyRef.doc('${newStudy.name}').set({
       'name' : newStudy.name,
       'category' : newStudy.category,
       'maxMemNumber' : newStudy.maxMemNumber,
-      'curruntMemNumber' : 0,
+      'currentMemNumber' : 0,
       'when' : newStudy.when,
       'introduction' : newStudy.introduction,
       'rule' : newStudy.rule,
@@ -166,7 +166,11 @@ class ApplicationStateProvider extends ChangeNotifier{
       'contect': contect,
       'master': true
     });
-
+    //appUser > mystudy subcollection에 Study 추가 
+    appUserRef.doc('${currentUserEmail}').collection('myStudy').doc('${newStudy.name}').set({
+      'name' : newStudy.name,
+      'master' : true, 
+    });
   }
 
 

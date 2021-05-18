@@ -7,7 +7,8 @@ import 'package:hudsonstudy/provider/applicationstate_provider.dart';
 //page
 import 'package:hudsonstudy/page/profile_page.dart';
 import 'package:hudsonstudy/page/create_study_page1.dart';
-
+//widget
+import 'package:hudsonstudy/widget/home_listview_widget.dart';
 
 
 class HomeWidget extends StatefulWidget {
@@ -73,13 +74,31 @@ class _HomeWidgetState extends State<HomeWidget> {
                   child: Container(
                     padding: EdgeInsets.fromLTRB(35, 0, 10,10),
                     height: 50,
-                    child: TextField(
-                      controller: _searchController,
+                    child: TextFormField(
+                      style: TextStyle(fontSize: 16.0,fontWeight: FontWeight.w300),
                       decoration: InputDecoration(
-                        filled: true, 
-                        labelText: 'Find the study you want',
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: ' Find the study you want!',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.7),
+                          borderSide: BorderSide(color: Colors.black, width: 5.0),
+                        ),
+                        contentPadding:
+                            const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.orange[300], width: 3.0),
+                          borderRadius: BorderRadius.circular(25.7),
+                        ),
                       ),
-                    ),
+                      controller: _searchController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter your message to continue';
+                        }
+                        return null;
+                      },
+                    )
                   ),
                 ),
                 Container(
@@ -91,6 +110,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                 ),
               ],
             ),
+            //home_listview()
+            HomeListViewWidget(),
           ],
         )
       ),

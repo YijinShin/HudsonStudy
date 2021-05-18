@@ -86,7 +86,7 @@ class _CreateStudyPage1State extends State<CreateStudyPage1> {
                   ),
                   SizedBox(height: 20,),
                   Container(
-                    padding: EdgeInsets.fromLTRB(50, 0,0,0),
+                    padding: EdgeInsets.fromLTRB(50,0,0,0),
                     child: Text(
                       'Number of member',
                       style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
@@ -191,7 +191,7 @@ class _CreateStudyPage1State extends State<CreateStudyPage1> {
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
                         color: Colors.black,
-                        child: Text('Create!',style: TextStyle(color: Colors.white),),
+                        child: Text('Next',style: TextStyle(color: Colors.white),),
                         onPressed: (){    
                           if (_formKey.currentState.validate()) {
                             //save info to study model
