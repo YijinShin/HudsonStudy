@@ -87,6 +87,19 @@ class _MyStudyDetailPageState extends State<MyStudyDetailPage> {
                           ],
                         ),
                       ),
+                      //master만 edit가능하게 고쳐야함. 
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 30, 0),
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                          color: Colors.black,
+                          child: Text('Edit',style: TextStyle(color: Colors.white),),
+                          onPressed: () {    
+                            print('apply!');
+                          },
+                        ),
+                      ), 
+
                     ],
                   ),
                   Divider(
