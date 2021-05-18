@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+//page
+import 'package:hudsonstudy/page/detail_page.dart';
 
 class HomeListViewWidget extends StatefulWidget {
   @override
@@ -29,6 +31,12 @@ class _HomeListViewWidgetState extends State<HomeListViewWidget> {
               children: snapshot.data.docs.map<Widget>((document){
                 return GestureDetector(
                   onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DetailPage(
+                        studyName: "${document['name']}",
+                      )),
+                    );
                     print("${document['name']}");
                   },
                   child: Container(
