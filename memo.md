@@ -45,3 +45,7 @@ Document = 스터디 이름(이름을 겹칠 수 없도록하자)
 신청 도큐먼트를 저장하는 collection 
 신청자first,surename, major,contect, studyid, study master user
 여기서 마스터가 받아주면 해당 도큐먼트의 정보를 user와 study에 각각 업데이트하고, 해당 도큐먼트는 지우기 
+
+memo 
+- AppstateProvider > addUserToAppstate : 사용자가 앱에 처음 로그인한 경우에만 호출됨. 이 때는 아직 사용자가 하는 스터디가 없기 때문에 subcollection은 생성하지 않음. 
+- AppstateProvider > addStueyToStudy : 처음 생성되면 생성한 유저 즉, current user이 마스터인 셈이니까 mem subcollection에 추가해주고 마스터 표시 해준다.  
