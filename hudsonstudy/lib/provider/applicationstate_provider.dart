@@ -34,6 +34,11 @@ class ApplicationStateProvider extends ChangeNotifier{
           //로그인이 되어있는 상태 
           if(user != null){
             _loginState = ApplicationLoginState.loggedIn; 
+            //if this is first loggin 
+              
+              //check this is first loggin
+              addUserToAppUser(); //add user in appUser colleciton
+            //read study collection
             _studySubscription = 
               FirebaseFirestore.instance
                 .collection('study')
@@ -43,18 +48,21 @@ class ApplicationStateProvider extends ChangeNotifier{
                   snapshot.docs.forEach((document) { 
                     _study.add(
                       Study(
-                        id: document.data()['id'],
                         name: document.data()['name'],
-                        price: document.data()['price'],
-                        description: document.data()['description'],
-                        thumb: document.data()['thnmb'],
-                        photoURL: document.data()['photoURL'],
-                        photoName: document.data()['photoName'],
-                        userId: document.data()['userId'],
+                        category: document.data()['category'],
+                        maxMemNumber: document.data()['maxMemNumber'],
+                        currentMemNumber: document.data()['currentMemNumber'],
+                        when: document.data()['when'],
+                        introduction: document.data()['introduction'],
+                        rule: document.data()['rule'],
+                        status: document.data()['status'],
+                        isPrivite: document.data()['isPrivite'],
+                        password: document.data()['password'],
                       ),
                     );
                   });
                 }); 
+            //read user collection
             _appUserSubscription = 
               FirebaseFirestore.instance
                 .collection('appUser')
@@ -65,8 +73,8 @@ class ApplicationStateProvider extends ChangeNotifier{
                     _appUser.add(
                       AppUser(
                         email: document.data()['id'],
-                        firstname: document.data()['firstname'],
-                        surename: document.data()['surename'],
+                        firstName: document.data()['firstName'],
+                        sureName: document.data()['sureName'],
                         major: document.data()['major'],
                         contect: document.data()['contect'],
                       ),
@@ -96,6 +104,71 @@ class ApplicationStateProvider extends ChangeNotifier{
   StreamSubscription<QuerySnapshot> _appUserSubscription; 
   List<AppUser> _appUser = [];
   List<AppUser> get appUser => _appUser;
+  
+
+  //checking first sign up & add user to appUser collection
+  Future<DocumentReference> addUserToAppUser ()async{
+    if (_loginState != ApplicationLoginState.loggedIn) {
+      throw Exception('Must be logged in');
+    }
+    bool firstSignUp = false;
+    final ref = FirebaseFirestore.instance.collection('appUser');
+    String currentUserEmail = FirebaseAuth.instance.currentUser.email;
+    //checking first sign up
+    await ref.doc('$currentUserEmail').get().then((document){
+      if (document.exists) firstSignUp = true;
+      else firstSignUp = false;
+    });
+    //add user in appUser
+    if(!firstSignUp){
+      ref.doc('$currentUserEmail').set({
+        'userId':currentUserEmail,
+        'firstName': '----',
+        'sureName' : FirebaseAuth.instance.currentUser.displayName,
+        'major' : '----',
+        'contect' : currentUserEmail,      
+      });
+    }
+  }
+
+  Future<DocumentReference> addStudyToStudy (NewStudy newStudy)async{
+    if (_loginState != ApplicationLoginState.loggedIn) {
+      throw Exception('Must be logged in');
+    }
+    final appUserRef = FirebaseFirestore.instance.collection('appUser');
+    final studyRef = FirebaseFirestore.instance.collection('study');
+    
+    //study의 matser 정보 얻기 
+    String currentUserEmail = FirebaseAuth.instance.currentUser.email;
+    String firstName, sureName, major, contect;
+    await appUserRef.doc('$currentUserEmail').get().then((document){
+      firstName = document.data()['firstName'];
+      sureName = document.data()['sureName'];
+      major = document.data()['major'];
+      contect = document.data()['contect'];
+    });
+
+    studyRef.doc('${newStudy.name}').set({
+      'name' : newStudy.name,
+      'category' : newStudy.category,
+      'maxMemNumber' : newStudy.maxMemNumber,
+      'curruntMemNumber' : 0,
+      'when' : newStudy.when,
+      'introduction' : newStudy.introduction,
+      'rule' : newStudy.rule,
+      'status' : '모집중',
+      'isPrivite' : newStudy.isPrivite,
+      'password' : newStudy.password,
+    });
+    studyRef.doc('${newStudy.name}').collection('member').doc('${currentUserEmail}').set({
+      'firstName': firstName,
+      'sureName': sureName,
+      'contect': contect,
+      'master': true
+    });
+
+  }
+
 
   
   //-------------------- authentication --------------------

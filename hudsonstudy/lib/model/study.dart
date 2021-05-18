@@ -1,25 +1,40 @@
 import 'package:flutter/foundation.dart';
 
+//DB에서 받아오는 용도 
 class Study{
   const Study({
-    @required this.id,
-    @required this.name, 
-    @required this.price, 
-    @required this.description, 
-    @required this.thumb, 
-    @required this.photoURL, 
-    @required this.photoName, 
-    @required this.userId,
-  }) :assert(name != null),
-      assert(price != null);
+    @required this.name,
+    @required this.category, 
+    @required this.maxMemNumber, 
+    @required this.currentMemNumber, 
+    @required this.when, 
+    @required this.introduction, 
+    @required this.rule, 
+    @required this.status,
+    @required this.isPrivite,
+    @required this.password,
+  }) :assert(name != null);
   
-  final String id;
   final String name;
-  final int price;
-  final String description;
-  final int thumb;
-  final String photoURL;
-  final String photoName;
-  final String userId;
+  final String category;
+  final int maxMemNumber;
+  final int currentMemNumber;
+  final String when;
+  final String introduction;
+  final String rule;
+  final String status;
+  final bool isPrivite;
+  final String password;
 }
 
+//새 스터를 만들때 사용
+class NewStudy{
+   String name = '---';
+   String category ='---';
+   int maxMemNumber = 0;
+   String when = '---';
+   String introduction = '---';
+   String rule ='---';
+   bool isPrivite =false;
+   String password ='---';
+}

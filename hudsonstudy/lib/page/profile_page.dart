@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hudsonstudy/page/start_page.dart';
 import 'package:provider/provider.dart';
 
+//provider
 import 'package:hudsonstudy/provider/applicationstate_provider.dart';
-
+//page
+import 'package:hudsonstudy/page/home_page.dart';
 
 
 class ProfilePage extends StatefulWidget {
@@ -54,7 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 provider.signOut();
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => StartPage()),
+                  MaterialPageRoute(builder: (context) => HomePage()),
                 );
               },
               child: Text('loggout'),  

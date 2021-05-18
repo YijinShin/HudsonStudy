@@ -4,8 +4,9 @@ import 'package:provider/provider.dart';
 
 //provider
 import 'package:hudsonstudy/provider/applicationstate_provider.dart';
-
+//page
 import 'package:hudsonstudy/page/profile_page.dart';
+import 'package:hudsonstudy/page/create_study_page1.dart';
 
 
 
@@ -96,7 +97,12 @@ class _HomeWidgetState extends State<HomeWidget> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
         child: Icon(Icons.add,color: Colors.white,),
-        onPressed: (){print('floating button');},
+        onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateStudyPage1()),
+          );
+        },
       ),
     );
   }
