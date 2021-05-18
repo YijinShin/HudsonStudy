@@ -23,6 +23,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white10,
@@ -82,7 +83,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                         hintText: ' Find the study you want!',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(25.7),
-                          borderSide: BorderSide(color: Colors.black, width: 5.0),
+                          borderSide: BorderSide(color: Colors.black12, width: 2),
                         ),
                         contentPadding:
                             const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),

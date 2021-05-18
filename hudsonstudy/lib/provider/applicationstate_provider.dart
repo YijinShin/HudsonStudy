@@ -169,6 +169,10 @@ class ApplicationStateProvider extends ChangeNotifier{
     //appUser > mystudy subcollection에 Study 추가 
     appUserRef.doc('${currentUserEmail}').collection('myStudy').doc('${newStudy.name}').set({
       'name' : newStudy.name,
+      'category' : newStudy.category,
+      'maxMemNumber' : newStudy.maxMemNumber,
+      'currentMemNumber' : 0,
+      'status' : '모집중',
       'master' : true, 
     });
   }

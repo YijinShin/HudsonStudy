@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:hudsonstudy/provider/applicationstate_provider.dart';
 //page
 import 'package:hudsonstudy/page/home_page.dart';
+//widget
+import 'package:hudsonstudy/widget/profile_listview_widget.dart';
 
 
 class ProfilePage extends StatefulWidget {
@@ -24,6 +26,20 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: Colors.white10,
         leading: BackButton(color: Colors.black),
         elevation: 0.0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            color: Colors.black,
+            onPressed: (){    
+              final provider = Provider.of<ApplicationStateProvider>(context, listen:false);
+              provider.signOut();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            },    
+          )
+        ],
       ),
       body: SafeArea(
         child: ListView(
@@ -50,17 +66,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ],
             ),
-            FlatButton(
-              onPressed: (){
-                final provider = Provider.of<ApplicationStateProvider>(context, listen:false);
-                provider.signOut();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                );
-              },
-              child: Text('loggout'),  
+            Container(
+              padding: EdgeInsets.fromLTRB(45, 15, 0, 10),
+              child: Text('My Study',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400))
             ),
+            ProfileViewWidget(),
           ],
         )
       ),
