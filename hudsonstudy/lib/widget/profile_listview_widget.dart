@@ -4,6 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+//page
+import 'package:hudsonstudy/page/my_study_detail_page.dart';
+
 
 class ProfileViewWidget extends StatefulWidget {
   @override
@@ -32,7 +35,12 @@ class _ProfileViewWidgetState extends State<ProfileViewWidget> {
               children: snapshot.data.docs.map<Widget>((document){
                 return GestureDetector(
                   onTap: (){
-                    print("${document['name']}");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyStudyDetailPage(
+                        studyName: "${document['name']}",
+                      )),
+                    );
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(20,0,20,10),
@@ -63,8 +71,6 @@ class _ProfileViewWidgetState extends State<ProfileViewWidget> {
                                   Icon(FontAwesomeIcons.crown, size: 17,)
                               ],
                             ),
-                            
-                            
                             Row(
                               children: [
                                 Icon(Icons.perm_identity,color: Colors.black,),

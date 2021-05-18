@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class DetailPage extends StatefulWidget {
+class AllStudyDetailPage extends StatefulWidget {
 
-  DetailPage({
+  AllStudyDetailPage({
     @required this.studyName
   });
   final String studyName;
 
   @override
-  _DetailPageState createState() => _DetailPageState();
+  _AllStudyDetailPageState createState() => _AllStudyDetailPageState();
 }
 
-class _DetailPageState extends State<DetailPage> {
+class _AllStudyDetailPageState extends State<AllStudyDetailPage> {
 
   final ref = FirebaseFirestore.instance.collection('study');
 

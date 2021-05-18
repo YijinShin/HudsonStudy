@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 //page
-import 'package:hudsonstudy/page/detail_page.dart';
+import 'package:hudsonstudy/page/all_study_detail_page.dart';
 
 class HomeListViewWidget extends StatefulWidget {
   @override
@@ -33,7 +33,7 @@ class _HomeListViewWidgetState extends State<HomeListViewWidget> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DetailPage(
+                      MaterialPageRoute(builder: (context) => AllStudyDetailPage(
                         studyName: "${document['name']}",
                       )),
                     );
