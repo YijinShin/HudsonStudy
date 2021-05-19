@@ -1,4 +1,4 @@
-###허드슨 스터디 디비 정리 메모
+### 허드슨 스터디 디비 정리 메모
 
 
 요약하자면
@@ -48,4 +48,13 @@ Document = 스터디 이름(이름을 겹칠 수 없도록하자)
 
 memo 
 - AppstateProvider > addUserToAppstate : 사용자가 앱에 처음 로그인한 경우에만 호출됨. 이 때는 아직 사용자가 하는 스터디가 없기 때문에 subcollection은 생성하지 않음. 
-- AppstateProvider > addStueyToStudy : 처음 생성되면 생성한 유저 즉, current user이 마스터인 셈이니까 mem subcollection에 추가해주고 마스터 표시 해준다.  
+- AppstateProvider > addStueyToStudy : 처음 생성되면 생성한 유저 즉, current user이 마스터인 셈이니까 mem subcollection에 추가해주고 마스터 표시 해준다. 
+
+alarm 종류
+- 스터디 apply 알람 > 해당 스터디의 마스터한테 옴. 
+- 스터디 accept 알람 > 해당 스터디의 신청자한테 옴.
+- 스터디 전체에 관한 알람 > 스터디 멤버 전체한테 옴. 
+- 만약 apply가 발생했을때, application collection에 저장을 한다하면 이름이 유니크할 수 없음. 
+- 이 경우 docId는 자동생성으로 해야함. 필드에 (신청자 id, 마스터 id, study이름) 이렇게 넣기. 알람page의 listview는 application collection을 구독하면서 master==currentuserId인지 where을 통해 걸러서 해당 신청건만 알람 listview에 띄움. 
+- 만약 apply가 발생했을때, 신청자와 마스터 안에 subcollection을 만들어서 저장한다면 두군데에 저장이 됨. 
+- 이 경우, apply발생  >  신청자의 subcollection에 신청한 스터디 이름 저장. 마스터의 subcolleciton에 스터디 이름과 신청자 저장(docid를 어떻게 해야하지)  
