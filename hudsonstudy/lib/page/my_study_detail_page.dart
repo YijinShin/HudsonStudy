@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MyStudyDetailPage extends StatefulWidget {
 
   MyStudyDetailPage({
-    @required this.studyName
+    @required this.studyName,
+    @required this.checkMaster
   });
   final String studyName;
+  final Future<String> Function(String name) checkMaster;
 
   @override
   _MyStudyDetailPageState createState() => _MyStudyDetailPageState();
@@ -14,7 +17,7 @@ class MyStudyDetailPage extends StatefulWidget {
 
 class _MyStudyDetailPageState extends State<MyStudyDetailPage> {
 
-  final ref = FirebaseFirestore.instance.collection('study');
+  final studyRef = FirebaseFirestore.instance.collection('study');
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +41,7 @@ class _MyStudyDetailPageState extends State<MyStudyDetailPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         StreamBuilder(
-                          stream: ref.doc('${widget.studyName}').snapshots(),
+                          stream: studyRef.doc('${widget.studyName}').snapshots(),
                           builder: (context,snapshot){
                             if(!snapshot.hasData){
                               return Center(child: Text('No item yet!',style: TextStyle(color: Colors.grey[300])));
@@ -72,7 +75,7 @@ class _MyStudyDetailPageState extends State<MyStudyDetailPage> {
                           children: [
                             Icon(Icons.perm_identity,color: Colors.black,),
                             StreamBuilder(
-                              stream: ref.doc('${widget.studyName}').snapshots(),
+                              stream: studyRef.doc('${widget.studyName}').snapshots(),
                               builder: (context,snapshot){
                                 if(!snapshot.hasData){
                                   return Center(child: Text('No item yet!',style: TextStyle(color: Colors.grey[300])));
@@ -88,18 +91,25 @@ class _MyStudyDetailPageState extends State<MyStudyDetailPage> {
                         ),
                       ),
                       //master만 edit가능하게 고쳐야함. 
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 30, 0),
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                          color: Colors.black,
-                          child: Text('Edit',style: TextStyle(color: Colors.white),),
-                          onPressed: () {    
-                            print('apply!');
-                          },
-                        ),
-                      ), 
-
+                      FutureBuilder(
+                        future: widget.checkMaster('${widget.studyName}'),
+                        builder: (context, snapshot){
+                          if(snapshot.data.toString()  == 'true'){
+                            return  Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 30, 0),
+                              child: RaisedButton(
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                                color: Colors.black,
+                                child: Text('Edit',style: TextStyle(color: Colors.white),),
+                                onPressed: () {    
+                                  print('edit!');
+                                },
+                              ),
+                            );
+                          }
+                          else return SizedBox(width:10);
+                        }
+                      ),
                     ],
                   ),
                   Divider(
@@ -114,7 +124,7 @@ class _MyStudyDetailPageState extends State<MyStudyDetailPage> {
                         Text('Category',style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20)),
                         SizedBox(width: 10,),
                         StreamBuilder(
-                          stream: ref.doc('${widget.studyName}').snapshots(),
+                          stream: studyRef.doc('${widget.studyName}').snapshots(),
                           builder: (context,snapshot){
                             if(!snapshot.hasData){
                               return Center(child: Text('No item yet!',style: TextStyle(color: Colors.grey[300])));
@@ -143,7 +153,7 @@ class _MyStudyDetailPageState extends State<MyStudyDetailPage> {
                         Text('When',style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20)),
                         SizedBox(width: 10,),
                         StreamBuilder(
-                          stream: ref.doc('${widget.studyName}').snapshots(),
+                          stream: studyRef.doc('${widget.studyName}').snapshots(),
                           builder: (context,snapshot){
                             if(!snapshot.hasData){
                               return Center(child: Text('No item yet!',style: TextStyle(color: Colors.grey[300])));
@@ -174,7 +184,7 @@ class _MyStudyDetailPageState extends State<MyStudyDetailPage> {
                         Text('Introduction',style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20)),
                         SizedBox(height: 7),
                         StreamBuilder(
-                          stream: ref.doc('${widget.studyName}').snapshots(),
+                          stream: studyRef.doc('${widget.studyName}').snapshots(),
                           builder: (context,snapshot){
                             if(!snapshot.hasData){
                               return Center(child: Text('No item yet!',style: TextStyle(color: Colors.grey[300])));
@@ -204,7 +214,7 @@ class _MyStudyDetailPageState extends State<MyStudyDetailPage> {
                         Text('Study rules',style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20)),
                         SizedBox(height: 7),
                         StreamBuilder(
-                          stream: ref.doc('${widget.studyName}').snapshots(),
+                          stream: studyRef.doc('${widget.studyName}').snapshots(),
                           builder: (context,snapshot){
                             if(!snapshot.hasData){
                               return Center(child: Text('No item yet!',style: TextStyle(color: Colors.grey[300])));

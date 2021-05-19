@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 //page
 import 'package:hudsonstudy/page/my_study_detail_page.dart';
+//provider
+import 'package:hudsonstudy/provider/applicationstate_provider.dart';
 
 
 class ProfileViewWidget extends StatefulWidget {
@@ -37,9 +40,16 @@ class _ProfileViewWidgetState extends State<ProfileViewWidget> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MyStudyDetailPage(
-                        studyName: "${document['name']}",
-                      )),
+                      MaterialPageRoute(
+                        builder: (context){
+                          return Consumer<ApplicationStateProvider>(
+                            builder:(context, appState, _) => MyStudyDetailPage(
+                              studyName: "${document['name']}",
+                              checkMaster: (String studyName) => appState.checkMasterUser(studyName)
+                            )
+                          );
+                        } 
+                      )
                     );
                   },
                   child: Container(

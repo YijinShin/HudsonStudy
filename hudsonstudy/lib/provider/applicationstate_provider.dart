@@ -10,6 +10,7 @@ import 'dart:async'; //StreamSubscription 을 사용하기 위해
 //model
 import 'package:hudsonstudy/model/study.dart';
 import 'package:hudsonstudy/model/user.dart';
+import 'package:hudsonstudy/model/application.dart';
 
 enum ApplicationLoginState {
   loggedOut,
@@ -34,10 +35,8 @@ class ApplicationStateProvider extends ChangeNotifier{
           //로그인이 되어있는 상태 
           if(user != null){
             _loginState = ApplicationLoginState.loggedIn; 
-            //if this is first loggin 
-              
-              //check this is first loggin
-              addUserToAppUser(); //add user in appUser colleciton
+            //check this is first loggin
+            addUserToAppUser(); //add user in appUser colleciton
             //read study collection
             _studySubscription = 
               FirebaseFirestore.instance
@@ -58,6 +57,7 @@ class ApplicationStateProvider extends ChangeNotifier{
                         status: document.data()['status'],
                         isPrivite: document.data()['isPrivite'],
                         password: document.data()['password'],
+                        master: document.data()['master'],
                       ),
                     );
                   });
@@ -77,6 +77,23 @@ class ApplicationStateProvider extends ChangeNotifier{
                         sureName: document.data()['sureName'],
                         major: document.data()['major'],
                         contect: document.data()['contect'],
+                      ),
+                    );
+                  });
+                }); 
+            //read application collection
+            _applicationSubscription = 
+              FirebaseFirestore.instance
+                .collection('application')
+                .snapshots()
+                .listen((snapshot) { 
+                  _application = [];
+                  snapshot.docs.forEach((document) { 
+                    _application.add(
+                      Application(
+                        studyName: document.data()['studyName'],
+                        applicant : document.data()['applicant'], 
+                        master : document.data()['master'], 
                       ),
                     );
                   });
@@ -104,9 +121,13 @@ class ApplicationStateProvider extends ChangeNotifier{
   StreamSubscription<QuerySnapshot> _appUserSubscription; 
   List<AppUser> _appUser = [];
   List<AppUser> get appUser => _appUser;
+  //application collection 
+  StreamSubscription<QuerySnapshot> _applicationSubscription; 
+  List<Application> _application = [];
+  List<Application> get application => _application;
   
 
-  //checking first sign up & add user to appUser collection
+  //Add User
   Future<DocumentReference> addUserToAppUser ()async{
     if (_loginState != ApplicationLoginState.loggedIn) {
       throw Exception('Must be logged in');
@@ -131,6 +152,7 @@ class ApplicationStateProvider extends ChangeNotifier{
     }
   }
 
+  //Add Study
   Future<DocumentReference> addStudyToStudy (NewStudy newStudy)async{
     if (_loginState != ApplicationLoginState.loggedIn) {
       throw Exception('Must be logged in');
@@ -159,10 +181,12 @@ class ApplicationStateProvider extends ChangeNotifier{
       'status' : '모집중',
       'isPrivite' : newStudy.isPrivite,
       'password' : newStudy.password,
+      'master' : currentUserEmail,
     });
     studyRef.doc('${newStudy.name}').collection('member').doc('${currentUserEmail}').set({
       'firstName': firstName,
       'sureName': sureName,
+      'major': major,
       'contect': contect,
       'master': true
     });
@@ -177,6 +201,62 @@ class ApplicationStateProvider extends ChangeNotifier{
     });
   }
 
+  //add application 
+  Future<DocumentReference> addApplicationToApplication (String studyName)async{
+    if (_loginState != ApplicationLoginState.loggedIn) {
+        throw Exception('Must be logged in');
+    }
+    final applicationRef = FirebaseFirestore.instance.collection('application');
+    final studyRef = FirebaseFirestore.instance.collection('study');
+    String currentUserEmail = FirebaseAuth.instance.currentUser.email;
+    String master;
+    //get study master id 
+    await studyRef.doc('$studyName').get().then((document) => master = document['master']);
+    //add application to collection 
+    applicationRef.add({
+      'studyName' : studyName,
+      'applicant' : currentUserEmail,
+      'master' : master,
+    });
+  }
+
+
+  //Checking Master User
+  Future<String> checkMasterUser(String studyName) async {      
+    final ref = FirebaseFirestore.instance.collection('appUser');
+    String currentUserEmail = FirebaseAuth.instance.currentUser.email;
+    String result;
+    await ref.doc('$currentUserEmail').collection('myStudy')
+      .where('name', isEqualTo: '$studyName')
+      .get().then((QuerySnapshot snapshot){
+        snapshot.docs.forEach((document) { 
+          if(document['master']) {
+            result= 'true';
+          }
+          else result= 'false';
+        });
+      });
+    return result;
+  }
+
+  Future<String> checkMyStudy(String studyName) async{
+    final ref = FirebaseFirestore.instance.collection('appUser');
+    String currentUserEmail = FirebaseAuth.instance.currentUser.email;
+    String result;
+
+    await ref.doc('$currentUserEmail').collection('myStudy')
+      .where('name', isEqualTo: '$studyName')
+      .get().then((QuerySnapshot snapshot){
+        snapshot.docs.forEach((document) { 
+          if(document.exists) {
+            print('$studyName : in my study');
+            result= 'true';
+          }
+        });
+      });
+    if (result != 'true') result = 'false';
+    return result;
+  }
 
   
   //-------------------- authentication --------------------

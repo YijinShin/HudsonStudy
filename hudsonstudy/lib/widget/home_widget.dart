@@ -7,6 +7,7 @@ import 'package:hudsonstudy/provider/applicationstate_provider.dart';
 //page
 import 'package:hudsonstudy/page/profile_page.dart';
 import 'package:hudsonstudy/page/create_study_page1.dart';
+import 'package:hudsonstudy/page/alarm_page.dart';
 //widget
 import 'package:hudsonstudy/widget/home_listview_widget.dart';
 
@@ -32,6 +33,10 @@ class _HomeWidgetState extends State<HomeWidget> {
           IconButton(
             icon: Icon(Icons.alarm,color: Colors.black), 
             onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AlarmPage()),
+              );
             },
           ),
         ],
@@ -48,7 +53,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                   child: FlatButton(
                     child: Image.asset('assets/user.png',fit: BoxFit.fill,),
                     onPressed: (){
-                       Navigator.push(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => ProfilePage()),
                       );

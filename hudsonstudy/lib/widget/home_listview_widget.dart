@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 //page
 import 'package:hudsonstudy/page/all_study_detail_page.dart';
+//provider
+import 'package:hudsonstudy/provider/applicationstate_provider.dart';
+
 
 class HomeListViewWidget extends StatefulWidget {
   @override
@@ -21,7 +25,7 @@ class _HomeListViewWidgetState extends State<HomeListViewWidget> {
       builder: (context, snapshot){
         //if no study > text
         if(!snapshot.hasData){
-          return Center(child: Text('There are no studies.\nCreate a new study!',style: TextStyle(color: Colors.grey[300]),),);
+          return Center(child: Text('There are no studies.\nCreate a new study!',style: TextStyle(color: Colors.grey)));
         }
         //else > study listview
         else{
@@ -33,11 +37,18 @@ class _HomeListViewWidgetState extends State<HomeListViewWidget> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AllStudyDetailPage(
-                        studyName: "${document['name']}",
-                      )),
+                      MaterialPageRoute(
+                        builder: (context){
+                          return Consumer<ApplicationStateProvider>(
+                            builder:(context, appState, _) => AllStudyDetailPage(
+                              studyName: "${document['name']}",
+                              checkMyStudy: (String studyName) => appState.checkMyStudy(studyName),
+                              addApplication: (String studyName) => appState.addApplicationToApplication(studyName),
+                            )
+                          );
+                        } 
+                      )
                     );
-                    print("${document['name']}");
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(20,0,20,10),

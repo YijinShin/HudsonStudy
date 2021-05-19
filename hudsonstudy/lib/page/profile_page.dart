@@ -48,8 +48,8 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Container(
                   margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  width: 120,
-                  height: 120,
+                  width: 90,
+                  height: 90,
                   child: Image.asset('assets/user.png',fit: BoxFit.fill,),
                 ),
                 Column(

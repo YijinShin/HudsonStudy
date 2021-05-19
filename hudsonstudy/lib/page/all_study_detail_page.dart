@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
 class AllStudyDetailPage extends StatefulWidget {
 
   AllStudyDetailPage({
-    @required this.studyName
+    @required this.studyName,
+    @required this.checkMyStudy,
+    @required this.addApplication 
   });
   final String studyName;
+  final Future<String> Function(String name) checkMyStudy;
+  final Future<void> Function(String name) addApplication;
 
   @override
   _AllStudyDetailPageState createState() => _AllStudyDetailPageState();
@@ -15,6 +20,27 @@ class AllStudyDetailPage extends StatefulWidget {
 class _AllStudyDetailPageState extends State<AllStudyDetailPage> {
 
   final ref = FirebaseFirestore.instance.collection('study');
+  
+  void _showDialog() { 
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Alert Dialog title"),
+          content: new Text("Alert Dialog body"),
+          actions: <Widget>[ 
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,18 +99,27 @@ class _AllStudyDetailPageState extends State<AllStudyDetailPage> {
                           ],
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 30, 0),
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                          color: Colors.black,
-                          child: Text('Apply',style: TextStyle(color: Colors.white),),
-                          onPressed: () {    
-                            print('apply!');
-                          },
-                        ),
-                      ), 
-
+                      FutureBuilder(
+                        future: widget.checkMyStudy('${widget.studyName}'),
+                        builder: (context, snapshot){
+                          print('snapshot : ${snapshot.data}');
+                          if(snapshot.data.toString()  == 'false'){
+                            return Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 30, 0),
+                              child: RaisedButton(
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                                color: Colors.black,
+                                child: Text('Apply',style: TextStyle(color: Colors.white),),
+                                onPressed: () {    
+                                  widget.addApplication('${widget.studyName}');
+                                  _showDialog();
+                                },
+                              ),
+                            ); 
+                          }
+                          else return SizedBox(width:10);
+                        }
+                      ),
                     ],
                   ),
                   Divider(

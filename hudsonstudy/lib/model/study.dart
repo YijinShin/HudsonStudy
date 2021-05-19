@@ -13,6 +13,7 @@ class Study{
     @required this.status,
     @required this.isPrivite,
     @required this.password,
+    @required this.master,
   }) :assert(name != null);
   
   final String name;
@@ -25,6 +26,7 @@ class Study{
   final String status;
   final bool isPrivite;
   final String password;
+  final String master;
 }
 
 //새 스터를 만들때 사용
