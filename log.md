@@ -4,6 +4,7 @@ log
  - homelist의 apply 버튼도 마찬가지로 마스터한테만 보여지지 않도록 수정함.  
  - apply 발생시 application collection 에 신청건 저장
  - apply 발생 시 pop-up 알림 띄우기 
+ - alarm page에 마스터 측에서 신청서 알람 list 
 
 todo
  - alarm apply page만들기 
