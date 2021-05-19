@@ -5,3 +5,4 @@ log
 
 todo
  - item apply page만들기 
+ - listview container 이랑 대부분의 text들 overflow 처리해주기 
