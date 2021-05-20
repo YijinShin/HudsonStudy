@@ -178,6 +178,7 @@ class _CreateStudyPage2State extends State<CreateStudyPage2> {
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
                         color: Colors.black,
+                        elevation:4.0,
                         child: Text('Create!',style: TextStyle(color: Colors.white),),
                         onPressed: () async{    
                           if (_formKey.currentState.validate()) {

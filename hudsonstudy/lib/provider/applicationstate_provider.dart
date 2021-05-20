@@ -220,6 +220,31 @@ class ApplicationStateProvider extends ChangeNotifier{
     });
   }
 
+  //add study to myStudy in appUser
+  Future<DocumentReference> addStudyToMyStudy (String userId, String studyName)async{
+    final userRef = FirebaseFirestore.instance.collection('appUser'); 
+    final studyRef = FirebaseFirestore.instance.collection('study'); 
+    String category, status;
+    int currentMemNumber, maxMemNumber;
+    await studyRef.doc('$studyName').get().then((document){
+      category = document.data()['category'];
+      status = document.data()['status'];
+      currentMemNumber = document.data()['currentMemNumber'];
+      maxMemNumber = document.data()['maxMemNumber'];
+    });
+
+    await userRef.doc('$userId').collection('myStudy').doc('$studyName').set({
+      'category' : category,
+      'status': status,
+      'master' : false,
+      'maxMemNumber' : maxMemNumber,
+      'currentMemNumber': currentMemNumber,
+      'name': studyName,
+    });
+  }
+
+
+  //add member to member in study
 
   //Checking Master User
   Future<String> checkMasterUser(String studyName) async {      

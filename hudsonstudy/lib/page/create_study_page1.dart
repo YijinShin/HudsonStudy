@@ -191,6 +191,7 @@ class _CreateStudyPage1State extends State<CreateStudyPage1> {
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
                         color: Colors.black,
+                        elevation:4.0,
                         child: Text('Next',style: TextStyle(color: Colors.white),),
                         onPressed: (){    
                           if (_formKey.currentState.validate()) {

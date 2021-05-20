@@ -18,6 +18,7 @@ class AlarmListViewWidget extends StatefulWidget {
 class _AlarmListViewWidgetState extends State<AlarmListViewWidget> {
 
   CollectionReference ref = FirebaseFirestore.instance.collection('application');
+  final userRef = FirebaseFirestore.instance.collection('appUser');
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +44,7 @@ class _AlarmListViewWidgetState extends State<AlarmListViewWidget> {
                           return Consumer<ApplicationStateProvider>(
                             builder:(context, appState, _) => ApplicationDetailPage(
                               applicant: "${document['applicant']}",
+                              addMyStudy: (String userId, String studyName,) => appState.addStudyToMyStudy(userId, studyName),
                             )
                           );
                         } 
@@ -68,7 +70,15 @@ class _AlarmListViewWidgetState extends State<AlarmListViewWidget> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('${document['applicant']} 님이 스터디 신청을 했습니다!',style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),),
+                        StreamBuilder(
+                          stream: userRef.doc('${document['applicant']}').snapshots(),
+                          builder: (context,snapshot){
+                            return Text(
+                              '${snapshot.data['firstName']}  ${snapshot.data['sureName']} 님이 스터디 신청을 했습니다!',
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                            );
+                          }
+                        ),
                         SizedBox(height:4),
                         Text('${document['studyName']}',style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),                      
                       ],
