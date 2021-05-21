@@ -31,3 +31,4 @@ todo
  - collection group query에 대해 공부하기(edit)https://joycehong0524.medium.com/firestore-%EC%9D%98-collection-group-query-51dcd64a5fd3
  - Edit profile Page 구현하기  
  - eidt profile page > major dropdownButton menu가 버튼 밑으로만 뜨도록 수정해야함. 
+ - streambuilder 데이터 읽어오기전에 overflow잠깐 뜨는거 >  if(!snapshot.hasData) return Container(width:10);으로 막을 수 있는거같은데 확인해야함.
