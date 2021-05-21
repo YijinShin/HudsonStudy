@@ -16,5 +16,11 @@ class AppUser{
   final String sureName;
   final String major;
   final String contect;
+}
 
+class EditUser{
+  String firstName;
+  String sureName;
+  String major;
+  String contect;
 }

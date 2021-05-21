@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hudsonstudy/page/start_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 //provider
@@ -20,6 +22,8 @@ class HomeWidget extends StatefulWidget {
 class _HomeWidgetState extends State<HomeWidget> {
 
   final _searchController = TextEditingController();
+  final appUserRef = FirebaseFirestore.instance.collection('appUser');
+  String currentUserEmail = FirebaseAuth.instance.currentUser.email;
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +69,16 @@ class _HomeWidgetState extends State<HomeWidget> {
                   children: [
                     Row(
                       children: [
-                        Text('Hi,',style: TextStyle(fontSize: 40, fontWeight: FontWeight.w300)),
-                        Text('Yijin ',style: TextStyle(fontSize: 40, fontWeight: FontWeight.w400)),
+                        Text('Hi, ',style: TextStyle(fontSize: 40, fontWeight: FontWeight.w300)),
+                        StreamBuilder(
+                          stream: appUserRef.doc('$currentUserEmail').snapshots(),
+                          builder: (context, snapshot){
+                            return Text(
+                              '${snapshot.data['sureName']}',
+                              style: TextStyle(fontSize: 40, fontWeight: FontWeight.w400)
+                            );
+                          },
+                        ),
                       ],
                     ),
                     Text('Computer Science',style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300)),

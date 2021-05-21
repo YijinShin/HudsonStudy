@@ -5,10 +5,16 @@ class ApplicationDetailPage extends StatefulWidget {
 
   ApplicationDetailPage({
     @required this.applicant,
-    @required this.addMyStudy
+    @required this.studyName,
+    @required this.addMyStudy,
+    @required this.addMember,
+    @required this.deleteApplication
   });
   final String applicant;
+  final String studyName;
   final Future<void> Function(String userId, String studyName) addMyStudy;
+  final Future<void> Function(String userId, String studyName) addMember;
+  final Future<void> Function(String userId, String studyName) deleteApplication;
 
   @override
   _ApplicationDetailPageState createState() => _ApplicationDetailPageState();
@@ -134,7 +140,11 @@ class _ApplicationDetailPageState extends State<ApplicationDetailPage> {
                     elevation:5.0,
                     child: Text('Reject',style: TextStyle(color: Colors.black, fontWeight: FontWeight.w300)),
                     onPressed: (){
-                      //application에서 데이터 지우기 
+                      //application에서 지우기
+                      widget.deleteApplication('${widget.applicant}', '${widget.studyName}');
+                      //applicant한테 알림주기
+                      //home_widget으로 돌아가기 
+                       Navigator.pop(context);
                     },
                   ),
                   RaisedButton(
@@ -146,11 +156,15 @@ class _ApplicationDetailPageState extends State<ApplicationDetailPage> {
                     elevation:5.0,
                     child: Text('Accept',style: TextStyle(color: Colors.black, fontWeight: FontWeight.w300)),
                     onPressed: (){
-                      //application에서 지우기
                       //study> mem에 데이터 추가
+                      widget.addMember('${widget.applicant}', '${widget.studyName}');
                       //appUser > myStudy에 데이터 추가 
-                      widget.addMyStudy()
-                      //applicant한테 알림주기 
+                      widget.addMyStudy('${widget.applicant}', '${widget.studyName}');
+                      //application에서 지우기
+                      widget.deleteApplication('${widget.applicant}', '${widget.studyName}');
+                      //applicant한테 알림주기
+                      //home_widget으로 돌아가기 
+                       Navigator.pop(context);
                     },
                   ),
                 ],

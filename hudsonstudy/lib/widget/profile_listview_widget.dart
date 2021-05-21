@@ -69,6 +69,7 @@ class _ProfileViewWidgetState extends State<ProfileViewWidget> {
                       ],
                     ),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,30 +82,10 @@ class _ProfileViewWidgetState extends State<ProfileViewWidget> {
                                   Icon(FontAwesomeIcons.crown, size: 17,)
                               ],
                             ),
-                            Row(
-                              children: [
-                                Icon(Icons.perm_identity,color: Colors.black,),
-                                Text('${document['currentMemNumber']}' + '/' + '${document['maxMemNumber']}'),
-                              ],
-                            )
                           ],
                         ),
-                        SizedBox(height:4),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('${document['category']}',style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300)),
-                            Container(
-                              padding: EdgeInsets.fromLTRB(10, 7, 10, 7),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.black12, width: 2),
-                              ),
-                              child: Text('${document['status']}'),
-                            ),
-                          ],                        
-                        ),
+                        SizedBox(height:10),
+                        Text('${document['category']}',style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300)),
                       ],
                     ),
                   ),

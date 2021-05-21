@@ -144,9 +144,9 @@ class ApplicationStateProvider extends ChangeNotifier{
     if(!firstSignUp){
       ref.doc('$currentUserEmail').set({
         'userId':currentUserEmail,
-        'firstName': '----',
+        'firstName': ' ',
         'sureName' : FirebaseAuth.instance.currentUser.displayName,
-        'major' : '----',
+        'major' : ' ',
         'contect' : currentUserEmail,      
       });
     }
@@ -174,7 +174,7 @@ class ApplicationStateProvider extends ChangeNotifier{
       'name' : newStudy.name,
       'category' : newStudy.category,
       'maxMemNumber' : newStudy.maxMemNumber,
-      'currentMemNumber' : 0,
+      'currentMemNumber' : 1, //Master 한명으로 시작하니까 1부터 시작
       'when' : newStudy.when,
       'introduction' : newStudy.introduction,
       'rule' : newStudy.rule,
@@ -194,9 +194,6 @@ class ApplicationStateProvider extends ChangeNotifier{
     appUserRef.doc('${currentUserEmail}').collection('myStudy').doc('${newStudy.name}').set({
       'name' : newStudy.name,
       'category' : newStudy.category,
-      'maxMemNumber' : newStudy.maxMemNumber,
-      'currentMemNumber' : 0,
-      'status' : '모집중',
       'master' : true, 
     });
   }
@@ -232,19 +229,80 @@ class ApplicationStateProvider extends ChangeNotifier{
       currentMemNumber = document.data()['currentMemNumber'];
       maxMemNumber = document.data()['maxMemNumber'];
     });
-
     await userRef.doc('$userId').collection('myStudy').doc('$studyName').set({
       'category' : category,
-      'status': status,
       'master' : false,
-      'maxMemNumber' : maxMemNumber,
-      'currentMemNumber': currentMemNumber,
       'name': studyName,
     });
   }
 
 
   //add member to member in study
+  Future<DocumentReference> addMemberToMember (String userId, String studyName)async{
+    print('in user data');
+    final userRef = FirebaseFirestore.instance.collection('appUser'); 
+    final studyRef = FirebaseFirestore.instance.collection('study'); 
+    //study currentNumber 갱신
+      int currentMemNumber;
+      await studyRef.doc('$studyName').get().then((document){
+        currentMemNumber = document.data()['currentMemNumber'];
+      });
+      await studyRef.doc('$studyName').update({
+        'currentMemNumber' : currentMemNumber + 1
+      });
+    //study mem에 mem 추가 
+      String contect, firstName, sureName, major;
+      print('in user data');
+      await userRef.doc('$userId').get().then((document){
+        contect = document.data()['contect'];
+        firstName = document.data()['firstName'];
+        sureName = document.data()['sureName'];
+        major = document.data()['major'];
+      });
+      await studyRef.doc('$studyName').collection('member').doc('$userId').set({
+        'contect' : contect,
+        'firstName': firstName,
+        'sureName' : sureName,
+        'major': major,
+        'master': false,
+      });
+  }
+
+  //delete data in application collection
+  Future<DocumentReference> deleteApplication (String userId, String studyName)async{
+    final ref = FirebaseFirestore.instance.collection('application');
+
+    await ref.where('studyName', isEqualTo: '$studyName')
+      .where('applicant', isEqualTo: '$userId').get().then((snapshot){
+        for(DocumentSnapshot document in snapshot.docs){
+          document.reference.delete();
+        }
+      });
+  }
+
+  //edit appUser Info 
+   Future<dynamic> editAppUser(EditUser editUser)async{
+    if (_loginState != ApplicationLoginState.loggedIn) {
+      throw Exception('Must be logged in');
+    }
+    final appUserRef = FirebaseFirestore.instance.collection('appUser');
+    final memberRef = FirebaseFirestore.instance.collection('member'); //study의 subcollection (복합색인)
+    String currentUserEmail = FirebaseAuth.instance.currentUser.email;
+    //edit appUser 
+    await appUserRef.doc('$currentUserEmail').update({
+      'firstName' : editUser.firstName,
+      'sureName' : editUser.sureName,
+      'contect' : editUser.contect,
+      'major' : editUser.major,
+    });
+    //edit member
+    await memberRef.doc('$currentUserEmail').update({
+      'firstName' : editUser.firstName,
+      'sureName' : editUser.sureName,
+      'contect' : editUser.contect,
+      'major' : editUser.major,
+    });
+   }
 
   //Checking Master User
   Future<String> checkMasterUser(String studyName) async {      
@@ -330,5 +388,4 @@ class ApplicationStateProvider extends ChangeNotifier{
     await _googleSignIn.signOut();
     FirebaseAuth.instance.signOut();
   }
-
 }

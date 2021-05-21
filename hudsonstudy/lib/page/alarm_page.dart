@@ -14,6 +14,8 @@ class _AlarmPageState extends State<AlarmPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white10,
+        centerTitle: true,
+        title: Text('notice', style: TextStyle(color: Colors.black)),
         leading: BackButton(color: Colors.black),
         elevation: 0.0,
       ),

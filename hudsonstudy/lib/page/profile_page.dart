@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hudsonstudy/page/start_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 //provider
 import 'package:hudsonstudy/provider/applicationstate_provider.dart';
 //page
 import 'package:hudsonstudy/page/home_page.dart';
+import 'package:hudsonstudy/page/edit_profile_page.dart';
 //widget
 import 'package:hudsonstudy/widget/profile_listview_widget.dart';
 
@@ -18,12 +21,15 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
 
   final _searchController = TextEditingController();
+  final appUserRef = FirebaseFirestore.instance.collection('appUser');
+  String currentUserEmail = FirebaseAuth.instance.currentUser.email;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white10,
+        //title: Text('My page',style: TextStyle(color: Colors.black),),
         leading: BackButton(color: Colors.black),
         elevation: 0.0,
         actions: [
@@ -56,9 +62,26 @@ class _ProfilePageState extends State<ProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text('Hi,',style: TextStyle(fontSize: 40, fontWeight: FontWeight.w300)),
-                        Text('Yijin ',style: TextStyle(fontSize: 40, fontWeight: FontWeight.w400)),
+                        StreamBuilder(
+                          stream: appUserRef.doc('$currentUserEmail').snapshots(),
+                          builder: (context, snapshot){
+                            return Text(
+                              '${snapshot.data['firstName']}  ${snapshot.data['sureName']}',
+                              style: TextStyle(fontSize: 40, fontWeight: FontWeight.w400)
+                            );
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.edit), 
+                          onPressed: (){
+                             Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => EditProfilePage()),
+                            );
+                          }
+                        ),
                       ],
                     ),
                     Text('Computer Science',style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300)),
