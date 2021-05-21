@@ -18,8 +18,13 @@ todo
 log
  - application detail page 구현하기 
  - alarm listview applicant 이름 보여주는 걸로 수정함.
+ - accept pressed했을 때, study의 mem에 applicant 추가
+ - accept pressed했을 때, appUser의 mystudy에 study 추가
+ - mystudy list에서 maxMemNember, currentMemNumber없앰. (필요없다고 판단)
 
 todo
- - accept 버튼 구현
+ - accept 버튼 클릭시, applicant에게 알림 주기 
+ - accept 버튼 클릭시 '추가하시겠습니까' 같은 pop alert 필요함. 
  - reject 버튼 구현
- - streambuilder initial data 설정가능한지 알아보기 
+ - streambuilder initial data 설정가능한지 알아보기(페이지 이동시 데이터 읽어올때까지 걸리는 시간동안 overflow발생)
+ - collection group query에 대해 공부하기(edit)https://joycehong0524.medium.com/firestore-%EC%9D%98-collection-group-query-51dcd64a5fd3
