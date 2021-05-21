@@ -21,10 +21,16 @@ log
  - accept pressed했을 때, study의 mem에 applicant 추가
  - accept pressed했을 때, appUser의 mystudy에 study 추가
  - mystudy list에서 maxMemNember, currentMemNumber없앰. (필요없다고 판단)
+ - home_widget, profile_page에서 유저 이름 데이터 베이스에서 받아오는 것으로 수정함. 
+ - reject 버튼 구현
+ - edit profile의 textcontroller들한테 current user info 전해주는거 구현중.
 
 todo
  - accept 버튼 클릭시, applicant에게 알림 주기 
  - accept 버튼 클릭시 '추가하시겠습니까' 같은 pop alert 필요함. 
- - reject 버튼 구현
  - streambuilder initial data 설정가능한지 알아보기(페이지 이동시 데이터 읽어올때까지 걸리는 시간동안 overflow발생)
  - collection group query에 대해 공부하기(edit)https://joycehong0524.medium.com/firestore-%EC%9D%98-collection-group-query-51dcd64a5fd3
+ - Edit profile Page 구현하기  
+ - eidt profile page > major dropdownButton menu가 버튼 밑으로만 뜨도록 수정해야함. 
+ - streambuilder 데이터 읽어오기전에 overflow잠깐 뜨는거 >  if(!snapshot.hasData) return Container(width:10);으로 막을 수 있는거같은데 확인해야함.
+ - edit profile의 textcontroller들한테 current user info 전해주는거 구현마치기 
