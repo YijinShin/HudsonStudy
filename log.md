@@ -35,3 +35,9 @@ todo
  - eidt profile page > major dropdownButton menu가 버튼 밑으로만 뜨도록 수정해야함. 
  - streambuilder 데이터 읽어오기전에 overflow잠깐 뜨는거 >  if(!snapshot.hasData) return Container(width:10);으로 막을 수 있는거같은데 확인해야함.
  - edit profile의 textcontroller들한테 current user info 전해주는거 구현마치기 
+
+# 5.22
+log
+ - 복합 색인 업데이트 구현완료 
+
+todo
