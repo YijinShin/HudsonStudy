@@ -73,6 +73,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                         StreamBuilder(
                           stream: appUserRef.doc('$currentUserEmail').snapshots(),
                           builder: (context, snapshot){
+                            if(!snapshot.hasData) return Container(width:10);
                             return Text(
                               '${snapshot.data['sureName']}',
                               style: TextStyle(fontSize: 40, fontWeight: FontWeight.w400)

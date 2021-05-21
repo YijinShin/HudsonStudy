@@ -1,27 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:hudsonstudy/page/start_page.dart';
-import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 //provider
 import 'package:hudsonstudy/provider/applicationstate_provider.dart';
 //page
 import 'package:hudsonstudy/page/home_page.dart';
+//model
+import 'package:hudsonstudy/model/user.dart';
 
 
 class EditProfilePage extends StatefulWidget {
+
+  EditProfilePage({
+    @required this.updateAppUser,
+    //@required this.editUser,
+    @required this.firstName,
+    @required this.sureName,
+    @required this.contect,
+    @required this.major,
+  });
+  final Future<void> Function(EditUser editUser) updateAppUser;
+  //EditUser editUser;
+   String firstName;
+   String sureName;
+   String contect;
+   String major;
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
 
-  final _searchController = TextEditingController();
+  final _majorList = [
+    '- - -',
+    'Computure Science',
+    'Life Science',
+    'Electrical Engineering',
+    'Mechanical Engineering',
+    'Counseling Psychology',
+    'Social Welfare',
+    'Communication Arts',
+    'Languages',
+    'Law',
+  ];
 
   @override
   Widget build(BuildContext context) {
+   // final _firstNameController = TextEditingController(text: "${widget.editUser.firstName}");
+   // final _sureNameController = TextEditingController(text: "${widget.editUser.sureName}");
+   // final _contectController = TextEditingController(text: "${widget.editUser.contect}");
+   // String selectedMajor = "${widget.editUser.major}";
+
+      final _firstNameController = TextEditingController(text: "${widget.firstName}");
+      final _sureNameController = TextEditingController(text: "${widget.sureName}");
+      final _contectController = TextEditingController(text: "${widget.contect}");
+      //String selectedMajor = "${widget.major}";
+      //String selectedMajor = '- - -';
+
+    final _formKey = GlobalKey<FormState>(debugLabel: '_EditeProfilePageState');
+
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white10,
+        backgroundColor: Colors.white,
         //title: Text('My page',style: TextStyle(color: Colors.black),),
         leading: BackButton(color: Colors.black),
         elevation: 0.0,
@@ -51,6 +93,182 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ],
             ),
+            SizedBox(height: 20,),
+            Container(
+              padding: EdgeInsets.fromLTRB(50, 0,0,0),
+              child: Text(
+                'Firstname',
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(30, 0,30,0),
+              child: TextFormField(
+                style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.w300),
+                controller: _firstNameController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Enter your message to continue';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  fillColor: Colors.transparent,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(25.7),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(25.7),
+                  ),
+                  filled: true, 
+                ),
+              ),
+            ),
+            SizedBox(height: 20,),
+            Container(
+              padding: EdgeInsets.fromLTRB(50, 0,0,0),
+              child: Text(
+                'Surename',
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(30, 0,30,0),
+              child: TextFormField(
+                style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.w300),
+                controller: _firstNameController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Enter your message to continue';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  fillColor: Colors.transparent,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(25.7),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(25.7),
+                  ),
+                  filled: true, 
+                ),
+              ),
+            ),
+            SizedBox(height: 20,),
+            Container(
+              padding: EdgeInsets.fromLTRB(50, 0,0,0),
+              child: Text(
+                'Major',
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(55, 10,55,0),
+              padding: EdgeInsets.fromLTRB(20, 0,20,0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Colors.black12, width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 0.4,
+                    blurRadius: 2,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  value: selectedMajor,
+                  //elevation : 40,
+                  items: _majorList.map(
+                      (value){
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }
+                  ).toList(),
+                  onChanged: (value){
+                    setState((){
+                      selectedMajor = value;
+                    });
+                  },
+                ),
+              ),
+            ),
+            SizedBox(height: 20,),
+            Container(
+              padding: EdgeInsets.fromLTRB(50, 0,0,0),
+              child: Text(
+                'Contect',
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(30, 0,30,0),
+              child: TextFormField(
+                style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.w300),
+                controller: _firstNameController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Enter your message to continue';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  fillColor: Colors.transparent,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(25.7),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(25.7),
+                  ),
+                  filled: true, 
+                ),
+              ),
+            ),
+            Container(
+                    margin: EdgeInsets.fromLTRB(0, 50, 50, 30),
+                    alignment: Alignment.bottomRight,
+                    child: Form(
+                      key: _formKey,
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          side: BorderSide(color: Colors.black),
+                        ),
+                        color: Colors.white,
+                        elevation:5.0,
+                        child: Text('Edit',style: TextStyle(color: Colors.black),),
+                        onPressed: (){    
+                          if (_formKey.currentState.validate()) {
+                            //save edited info to structure
+                            widget.firstName = _firstNameController.text;
+                            widget.sureName = _sureNameController.text;
+                            widget.major = selectedMajor;
+                            widget.contect = _contectController.text;
+                            //update appUser
+                            //widget.updateAppUser(widget.editUser);
+                            //controller clear
+                            _firstNameController.clear();
+                            _sureNameController.clear();
+                            _contectController.clear();
+                            //navigator
+                            Navigator.pop(context);
+                          }
+                        },
+                      ),
+                    ),
+                  )
           ],
         )
       ),

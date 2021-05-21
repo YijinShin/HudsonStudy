@@ -50,6 +50,7 @@ class _ApplicationDetailPageState extends State<ApplicationDetailPage> {
                     StreamBuilder(
                       stream: ref.doc('${widget.applicant}').snapshots(),
                       builder: (context,snapshot){
+                        if(!snapshot.hasData) return Container(width:10);
                         return Row(
                           children: [
                             Text('${snapshot.data['sureName']}',style: TextStyle(fontSize: 40, fontWeight: FontWeight.w400)),
@@ -73,6 +74,7 @@ class _ApplicationDetailPageState extends State<ApplicationDetailPage> {
                   StreamBuilder(
                     stream: ref.doc('${widget.applicant}').snapshots(),
                     builder: (context,snapshot){
+                      if(!snapshot.hasData) return Container(width:10);
                       return Text(
                         '${snapshot.data['firstName']}  ${snapshot.data['sureName']}',
                         style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18),
@@ -94,6 +96,7 @@ class _ApplicationDetailPageState extends State<ApplicationDetailPage> {
                   StreamBuilder(
                     stream: ref.doc('${widget.applicant}').snapshots(),
                     builder: (context,snapshot){
+                       if(!snapshot.hasData) return Container(width:10);
                       return Text(
                         '${snapshot.data['major']}',
                         style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18),
@@ -115,6 +118,7 @@ class _ApplicationDetailPageState extends State<ApplicationDetailPage> {
                   StreamBuilder(
                     stream: ref.doc('${widget.applicant}').snapshots(),
                     builder: (context,snapshot){
+                       if(!snapshot.hasData) return Container(width:10);
                       return Text(
                         '${snapshot.data['contect']}',
                         style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18),

@@ -11,6 +11,8 @@ import 'package:hudsonstudy/page/home_page.dart';
 import 'package:hudsonstudy/page/edit_profile_page.dart';
 //widget
 import 'package:hudsonstudy/widget/profile_listview_widget.dart';
+//model
+import 'package:hudsonstudy/model/user.dart';
 
 
 class ProfilePage extends StatefulWidget {
@@ -23,9 +25,11 @@ class _ProfilePageState extends State<ProfilePage> {
   final _searchController = TextEditingController();
   final appUserRef = FirebaseFirestore.instance.collection('appUser');
   String currentUserEmail = FirebaseAuth.instance.currentUser.email;
-
   @override
   Widget build(BuildContext context) {
+    EditUser currentUser;
+    String firstName, sureName, contect, major;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white10,
@@ -67,6 +71,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         StreamBuilder(
                           stream: appUserRef.doc('$currentUserEmail').snapshots(),
                           builder: (context, snapshot){
+                            if(!snapshot.hasData) return Container(width:10);
+                            //edit page로 넘겨줄 정보 확보 
+                             firstName = '${snapshot.data['firstName']}';
+                             sureName = '${snapshot.data['sureName']}';
+                             contect = '${snapshot.data['contect']}';
+                             major = '${snapshot.data['major']}';
                             return Text(
                               '${snapshot.data['firstName']}  ${snapshot.data['sureName']}',
                               style: TextStyle(fontSize: 40, fontWeight: FontWeight.w400)
@@ -76,9 +86,26 @@ class _ProfilePageState extends State<ProfilePage> {
                         IconButton(
                           icon: Icon(Icons.edit), 
                           onPressed: (){
-                             Navigator.push(
+                            Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => EditProfilePage()),
+                              MaterialPageRoute(
+                                builder: (context){
+                                  //currentUser.firstName = firstName;
+                                  //currentUser.sureName = sureName;
+                                  //currentUser.contect = contect;
+                                  //currentUser.major = major;
+                                  return Consumer<ApplicationStateProvider>(
+                                    builder:(context, appState, _) => EditProfilePage(
+                                      updateAppUser: (EditUser editUser) => appState.updateAppUser(editUser),                                       
+                                      //editUser : currentUser,
+                                      firstName: firstName,
+                                      sureName: sureName,
+                                      major: major,
+                                      contect: contect,
+                                    )
+                                  );
+                                } 
+                              )
                             );
                           }
                         ),

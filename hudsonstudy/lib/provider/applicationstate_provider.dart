@@ -281,7 +281,7 @@ class ApplicationStateProvider extends ChangeNotifier{
   }
 
   //edit appUser Info 
-   Future<dynamic> editAppUser(EditUser editUser)async{
+  Future<dynamic> updateAppUser(EditUser editUser)async{
     if (_loginState != ApplicationLoginState.loggedIn) {
       throw Exception('Must be logged in');
     }

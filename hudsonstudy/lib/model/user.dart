@@ -19,8 +19,8 @@ class AppUser{
 }
 
 class EditUser{
-  String firstName;
-  String sureName;
-  String major;
-  String contect;
+  String firstName = ' ';
+  String sureName= ' ';
+  String major= ' ';
+  String contect= ' ';
 }
