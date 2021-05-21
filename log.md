@@ -23,6 +23,7 @@ log
  - mystudy list에서 maxMemNember, currentMemNumber없앰. (필요없다고 판단)
  - home_widget, profile_page에서 유저 이름 데이터 베이스에서 받아오는 것으로 수정함. 
  - reject 버튼 구현
+
 todo
  - accept 버튼 클릭시, applicant에게 알림 주기 
  - accept 버튼 클릭시 '추가하시겠습니까' 같은 pop alert 필요함. 
