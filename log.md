@@ -27,4 +27,4 @@ todo
  - accept 버튼 클릭시 '추가하시겠습니까' 같은 pop alert 필요함. 
  - reject 버튼 구현
  - streambuilder initial data 설정가능한지 알아보기(페이지 이동시 데이터 읽어올때까지 걸리는 시간동안 overflow발생)
- 
+ - collection group query에 대해 공부하기(edit)
