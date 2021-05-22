@@ -90,14 +90,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context){
-                                  //currentUser.firstName = firstName;
-                                  //currentUser.sureName = sureName;
-                                  //currentUser.contect = contect;
-                                  //currentUser.major = major;
                                   return Consumer<ApplicationStateProvider>(
                                     builder:(context, appState, _) => EditProfilePage(
-                                      updateAppUser: (EditUser editUser) => appState.updateAppUser(editUser),                                       
-                                      //editUser : currentUser,
+                                      updateAppUser: (String firstName, String sureName, String major, String contect) => appState.updateAppUser(firstName, sureName, major, contect),                                       
                                       firstName: firstName,
                                       sureName: sureName,
                                       major: major,

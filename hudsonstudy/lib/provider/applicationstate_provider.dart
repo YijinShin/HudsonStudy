@@ -146,7 +146,7 @@ class ApplicationStateProvider extends ChangeNotifier{
         'userId':currentUserEmail,
         'firstName': ' ',
         'sureName' : FirebaseAuth.instance.currentUser.displayName,
-        'major' : ' ',
+        'major' : 'None',
         'contect' : currentUserEmail,      
       });
     }
@@ -188,7 +188,8 @@ class ApplicationStateProvider extends ChangeNotifier{
       'sureName': sureName,
       'major': major,
       'contect': contect,
-      'master': true
+      'master': true,
+      'userId' : currentUserEmail,
     });
     //appUser > mystudy subcollection에 Study 추가 
     appUserRef.doc('${currentUserEmail}').collection('myStudy').doc('${newStudy.name}').set({
@@ -281,26 +282,71 @@ class ApplicationStateProvider extends ChangeNotifier{
   }
 
   //edit appUser Info 
-  Future<dynamic> updateAppUser(EditUser editUser)async{
+  Future<dynamic> updateAppUser(String firstName, String sureName, String major, String contect)async{
     if (_loginState != ApplicationLoginState.loggedIn) {
       throw Exception('Must be logged in');
     }
-    final appUserRef = FirebaseFirestore.instance.collection('appUser');
-    final memberRef = FirebaseFirestore.instance.collection('member'); //study의 subcollection (복합색인)
+    print('check:$firstName $sureName, $major, $contect}');
     String currentUserEmail = FirebaseAuth.instance.currentUser.email;
+    final appUserRef = FirebaseFirestore.instance.collection('appUser');
+    final memberRef = FirebaseFirestore.instance.collectionGroup('member')
+      .where('userId', isEqualTo: currentUserEmail); //study의 subcollection (복합색인)
+    //final memberRef2 = FirebaseFirestore.instance.collectionGroup('member');
     //edit appUser 
-    await appUserRef.doc('$currentUserEmail').update({
-      'firstName' : editUser.firstName,
-      'sureName' : editUser.sureName,
-      'contect' : editUser.contect,
-      'major' : editUser.major,
+    appUserRef.doc('$currentUserEmail').update({
+      'firstName' : firstName,
+      'sureName' : sureName,
+      'contect' : contect,
+      'major' : major,
+    });
+    memberRef.get().then((value){
+      value.docs.forEach((element) { print('member : ${element.data()}');});
     });
     //edit member
-    await memberRef.doc('$currentUserEmail').update({
-      'firstName' : editUser.firstName,
-      'sureName' : editUser.sureName,
-      'contect' : editUser.contect,
-      'major' : editUser.major,
+    memberRef.get().then((snapshot){
+      snapshot.docs.forEach((doc) { 
+        doc.reference.update({
+          'firstName' : firstName,
+          'sureName' : sureName,
+          'contect' : contect,
+          'major' : major,
+        });
+      });
+    });
+   }
+
+
+  //edit study Info 
+  Future<dynamic> updateStudy(String category, String introduction, bool isPrivite, int maxMemNumber
+    , String studyName, String password, String rule, String status, String when)async{
+    if (_loginState != ApplicationLoginState.loggedIn) {
+      throw Exception('Must be logged in');
+    }
+    String currentUserEmail = FirebaseAuth.instance.currentUser.email;
+    final studyrRef = FirebaseFirestore.instance.collection('study');
+    final memberRef = FirebaseFirestore.instance.collectionGroup('myStudy')
+      .where('name', isEqualTo: studyName); //study의 subcollection (복합색인)
+    //edit study 
+    studyrRef.doc('$studyName').update({
+      'category' : category,
+      'introduction' : introduction,
+      'isPrivite' : isPrivite,
+      'maxMemNumber' : maxMemNumber,
+      'password':password,
+      'rule' : rule,
+      'status': status,
+      'when': when,
+    });
+    memberRef.get().then((value){
+      value.docs.forEach((element) { print('member : ${element.data()}');});
+    });
+    //edit myStudy
+    memberRef.get().then((snapshot){
+      snapshot.docs.forEach((doc) { 
+        doc.reference.update({
+          'category' : category,
+        });
+      });
     });
    }
 

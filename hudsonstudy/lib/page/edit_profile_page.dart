@@ -20,7 +20,7 @@ class EditProfilePage extends StatefulWidget {
     @required this.contect,
     @required this.major,
   });
-  final Future<void> Function(EditUser editUser) updateAppUser;
+  final Future<void> Function(String firstName, String sureName, String major, String contect) updateAppUser;
   //EditUser editUser;
    String firstName;
    String sureName;
@@ -33,7 +33,7 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
 
   final _majorList = [
-    '- - -',
+    'None',
     'Computure Science',
     'Life Science',
     'Electrical Engineering',
@@ -47,18 +47,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-   // final _firstNameController = TextEditingController(text: "${widget.editUser.firstName}");
-   // final _sureNameController = TextEditingController(text: "${widget.editUser.sureName}");
-   // final _contectController = TextEditingController(text: "${widget.editUser.contect}");
-   // String selectedMajor = "${widget.editUser.major}";
-
       final _firstNameController = TextEditingController(text: "${widget.firstName}");
       final _sureNameController = TextEditingController(text: "${widget.sureName}");
       final _contectController = TextEditingController(text: "${widget.contect}");
-      //String selectedMajor = "${widget.major}";
-      //String selectedMajor = '- - -';
+      String selectedMajor = "${widget.major}";
+      //print('selected : $selectedMajor');
+      //String selectedMajor = 'None';
+      String firstName, sureName, contect, major;
 
-    final _formKey = GlobalKey<FormState>(debugLabel: '_EditeProfilePageState');
+
+    final _formKey = GlobalKey<FormState>(debugLabel: '_EditProfilePageState');
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -138,7 +136,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               padding: EdgeInsets.fromLTRB(30, 0,30,0),
               child: TextFormField(
                 style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.w300),
-                controller: _firstNameController,
+                controller: _sureNameController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Enter your message to continue';
@@ -189,15 +187,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   //elevation : 40,
                   items: _majorList.map(
                       (value){
-                        return DropdownMenuItem(
+                        return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
                         );
                       }
                   ).toList(),
-                  onChanged: (value){
+                  onChanged: (String newValue){
                     setState((){
-                      selectedMajor = value;
+                      selectedMajor = newValue;
+                      print('seleted major : $newValue');
                     });
                   },
                 ),
@@ -215,7 +214,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               padding: EdgeInsets.fromLTRB(30, 0,30,0),
               child: TextFormField(
                 style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.w300),
-                controller: _firstNameController,
+                controller: _contectController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Enter your message to continue';
@@ -249,15 +248,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         color: Colors.white,
                         elevation:5.0,
                         child: Text('Edit',style: TextStyle(color: Colors.black),),
-                        onPressed: (){    
+                        onPressed: () async{    
                           if (_formKey.currentState.validate()) {
                             //save edited info to structure
-                            widget.firstName = _firstNameController.text;
-                            widget.sureName = _sureNameController.text;
-                            widget.major = selectedMajor;
-                            widget.contect = _contectController.text;
+                            print('new first name :${_firstNameController.text}');
                             //update appUser
-                            //widget.updateAppUser(widget.editUser);
+                            await widget.updateAppUser(_firstNameController.text, _sureNameController.text, selectedMajor, _contectController.text);
                             //controller clear
                             _firstNameController.clear();
                             _sureNameController.clear();
