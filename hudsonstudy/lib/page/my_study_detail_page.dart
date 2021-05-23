@@ -40,7 +40,11 @@ class _MyStudyDetailPageState extends State<MyStudyDetailPage> {
           onPressed:(){Navigator.pop(context);}),
       ),
       extendBodyBehindAppBar: true,
-      endDrawer: memberDrawerWidget(context, widget.studyName),
+      endDrawer: Consumer<ApplicationStateProvider>(
+        builder:(context, appState, _) => MemberDrawerWidget(
+          studyName: "${widget.studyName}",
+        )
+      ),
       body: Column(
         children: [
           Container(
