@@ -44,9 +44,10 @@ log
 log
  - appuser update 구현. 
  - study update 구현중
- - drawer 틀 만들기
+ - drawer로 현 study의 맴버 리스트 보여주기, (master표시하기)
+ - drawer 옆으로 미는 동작 가능
 
 todo
  - study update 오류남. 
- - drawer 마져 구현하기
+ - drawer 밀면 팝업창 띄운 후 맴버 삭제 기능 더하기
  - appuser 안에 application sub collection 생성해야함. 
