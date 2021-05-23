@@ -48,6 +48,7 @@ class _EditStudyPageState extends State<EditStudyPage> {
     final _categoryController = TextEditingController(text: '${widget.category}');
     final _introductionController = TextEditingController(text: '${widget.introduction}');
     final _maxMemNumberController = TextEditingController(text: '${widget.maxMemNumber}');
+   //final _nameController = TextEditingController(text: '${widget.name}');
     final _passwordController = TextEditingController(text: '${widget.password}');
     final _studyRuleController = TextEditingController(text: '${widget.rules}');
     final _whenController = TextEditingController(text: '${widget.when}');
@@ -55,7 +56,6 @@ class _EditStudyPageState extends State<EditStudyPage> {
     bool isPrivite = widget.isPrivite;
 
     return Scaffold(
-      //resizeToAvoidBottomInset : false,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -286,7 +286,6 @@ class _EditStudyPageState extends State<EditStudyPage> {
                         child: Text('Save',style: TextStyle(color: Colors.white),),
                         onPressed: () async{    
                           if (_formKey.currentState.validate()) {
-                            //save data to widget.newStudy
                             //call editing function 
                             widget.updateStudy(_categoryController.text, _introductionController.text, isPrivite, int.tryParse( _maxMemNumberController.text), 
                                   widget.name,_passwordController.text,_studyRuleController.text, '모집중',_whenController.text);

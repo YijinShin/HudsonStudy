@@ -46,7 +46,7 @@ class _HomeWidgetState extends State<HomeWidget> {
         ],
       ),
       body: SafeArea(
-        child: ListView(
+        child: Column(
           children: [
             Row(
               children: [
@@ -130,7 +130,7 @@ class _HomeWidgetState extends State<HomeWidget> {
               ],
             ),
             //home_listview()
-            HomeListViewWidget(),
+            Expanded(child: HomeListViewWidget()),
           ],
         )
       ),
