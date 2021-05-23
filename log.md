@@ -40,4 +40,13 @@ todo
 log
  - 복합 색인 업데이트 구현완료 
 
+# 5.23
+log
+ - appuser update 구현. 
+ - study update 구현중
+ - drawer 틀 만들기
+
 todo
+ - study update 오류남. 
+ - drawer 마져 구현하기
+ - appuser 안에 application sub collection 생성해야함. 
