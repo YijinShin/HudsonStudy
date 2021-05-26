@@ -51,3 +51,12 @@ todo
  - study update 오류남. 
  - drawer 밀면 팝업창 띄운 후 맴버 삭제 기능 더하기
  - appuser 안에 application sub collection 생성해야함. 
+ 
+ # 5.24
+ 
+ todo
+  - popup alert
+  - study create버튼 누르면 '스터디가 생성되었습니다.' 알림 띄우기
+  - study edit하고 save 버튼 누르면 '스터디가 수정되었습니다.' 알림 띄우기
+  - profile edit 하고 save 버튼 누르면 '프로필이 수정되었습니다.' 알림 띄우기
+  - study apply 버튼 누르면 '스터디에 신청서를 넣었습니다.' 알림 띄우기 (구현은 되어있는데 디자인 통일하기)
