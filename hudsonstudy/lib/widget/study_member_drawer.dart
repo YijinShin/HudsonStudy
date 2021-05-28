@@ -14,18 +14,60 @@ class MemberDrawerWidget extends StatefulWidget {
 
   MemberDrawerWidget({
     @required this.studyName,
-   // @required this.deleteMember,
+    @required this.deleteMember,
   });
   final String studyName;
-  //final deleteMember;
-
-
-
+  final Future<void> Function(String studyName, String memberId) deleteMember;
   @override
   _MemberDrawerWidgetState createState() => _MemberDrawerWidgetState();
 }
 
 class _MemberDrawerWidgetState extends State<MemberDrawerWidget> {
+
+  void _deleteDialog(String memberId) { 
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          title: Center(
+            child: Text(
+              "잠깐!",
+              //style: TextStyle(color: Colors.orange[600]),
+            )
+          ),
+          content: Text("정말 멤버를 삭제하시겠습니까?"),
+          actions: <Widget>[ 
+            FlatButton(
+              color: Colors.orange[600],
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              child: Text(
+                "아니오",
+                style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              color: Colors.orange[600],
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              child: new Text(
+                "확인",
+                style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+              ),
+              onPressed: () {
+                //delete member
+                widget.deleteMember('${widget.studyName}',memberId );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     CollectionReference ref = FirebaseFirestore.instance.collection('study').doc('${widget.studyName}').collection('member');
@@ -55,13 +97,11 @@ class _MemberDrawerWidgetState extends State<MemberDrawerWidget> {
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(10),
                 children: snapshot.data.docs.map<Widget>((document){
-                  return Dismissible(
-                    key: UniqueKey(),
-                    onDismissed:(direction){
+                  return GestureDetector(
+                    onTap:(){
                       setState(() {
-
-                        ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text("dismissed")));
+                        print('member >> ${document['userId']}');
+                        _deleteDialog('${document['userId']}');
                         print('hello');
                       });
                     },
@@ -87,8 +127,8 @@ class _MemberDrawerWidgetState extends State<MemberDrawerWidget> {
                               Row(
                                 children: [
                                   Text(
-                                    '${document['firstName']}  ${document['sureName']}',
-                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400)                      ,
+                                    '${document['firstName']} ${document['sureName']}',
+                                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w400)                      ,
                                   ),
                                   SizedBox(width:6),
                                   if(document['master'])
@@ -97,11 +137,11 @@ class _MemberDrawerWidgetState extends State<MemberDrawerWidget> {
                               ),
                               Text(
                                 '${document['major']}',
-                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300)
+                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300)
                               ),
                               Text(
                                 '${document['contect']}',
-                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300)
+                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300)
                               ),
                             ],
                           )

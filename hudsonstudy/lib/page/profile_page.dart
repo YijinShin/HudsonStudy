@@ -52,7 +52,8 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
       body: SafeArea(
-        child: ListView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -78,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
                              contect = '${snapshot.data['contect']}';
                              major = '${snapshot.data['major']}';
                             return Text(
-                              '${snapshot.data['firstName']}  ${snapshot.data['sureName']}',
+                              '${snapshot.data['firstName']} ${snapshot.data['sureName']}',
                               style: TextStyle(fontSize: 40, fontWeight: FontWeight.w400)
                             );
                           },
@@ -115,7 +116,7 @@ class _ProfilePageState extends State<ProfilePage> {
               padding: EdgeInsets.fromLTRB(45, 15, 0, 10),
               child: Text('My Study',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400))
             ),
-            ProfileViewWidget(),
+            Expanded(child: ProfileViewWidget()),
           ],
         )
       ),

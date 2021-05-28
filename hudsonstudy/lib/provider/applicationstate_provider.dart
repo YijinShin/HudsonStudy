@@ -243,14 +243,21 @@ class ApplicationStateProvider extends ChangeNotifier{
     print('in user data');
     final userRef = FirebaseFirestore.instance.collection('appUser'); 
     final studyRef = FirebaseFirestore.instance.collection('study'); 
-    //study currentNumber 갱신
-      int currentMemNumber;
+     int currentMemNumber,maxMemNumber;
       await studyRef.doc('$studyName').get().then((document){
         currentMemNumber = document.data()['currentMemNumber'];
+        maxMemNumber = document.data()['maxMemNumber'];
       });
+    //study currentNumber 갱신
       await studyRef.doc('$studyName').update({
         'currentMemNumber' : currentMemNumber + 1
       });
+    //study state 갱신(maxmam == current mem인 경우만 해당)
+      if(currentMemNumber+1 == maxMemNumber){
+        await studyRef.doc('$studyName').update({
+          'status' : '모집완료'
+        });
+      }
     //study mem에 mem 추가 
       String contect, firstName, sureName, major;
       print('in user data');
@@ -279,6 +286,44 @@ class ApplicationStateProvider extends ChangeNotifier{
           document.reference.delete();
         }
       });
+  }
+
+  //delete study member 
+  Future<DocumentReference> deleteMember (String studyName, String memberId) async{
+    final studyRef = FirebaseFirestore.instance.collection('study');
+    final memberRef = studyRef.doc('${studyName}').collection('member');
+    final myStudyRef = FirebaseFirestore.instance.collection('appUser').doc('${memberId}').collection('myStudy');
+    
+    int currentMemNumber,maxMemNumber;
+      await studyRef.doc('$studyName').get().then((document){
+        currentMemNumber = document.data()['currentMemNumber'];
+        maxMemNumber = document.data()['maxMemNumber'];
+    });
+
+    //study > member에서 member 지우기 
+    await memberRef.where('userId', isEqualTo: '$memberId').get().then((snapshot){
+      for(DocumentSnapshot document in snapshot.docs){
+          document.reference.delete();
+        }
+    });
+    //study currentMemNumber 수정
+    await studyRef.doc('$studyName').update({
+        'currentMemNumber' : currentMemNumber - 1
+    });
+    //study status 수정
+    if(currentMemNumber-1 < maxMemNumber){
+        await studyRef.doc('$studyName').update({
+          'status' : '모집중'
+        });
+    }
+
+    //appUser > myStudy에서 study지우기 
+    await myStudyRef.where('name', isEqualTo: '$studyName').get().then((snapshot){
+      for(DocumentSnapshot document in snapshot.docs){
+          document.reference.delete();
+        }
+    });
+
   }
 
   //edit appUser Info 

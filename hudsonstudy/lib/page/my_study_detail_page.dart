@@ -43,6 +43,7 @@ class _MyStudyDetailPageState extends State<MyStudyDetailPage> {
       endDrawer: Consumer<ApplicationStateProvider>(
         builder:(context, appState, _) => MemberDrawerWidget(
           studyName: "${widget.studyName}",
+          deleteMember : (String studyName, String memberId) => appState.deleteMember(studyName, memberId)
         )
       ),
       body: Column(

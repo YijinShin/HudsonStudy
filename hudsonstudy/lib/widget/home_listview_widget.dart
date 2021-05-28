@@ -83,17 +83,28 @@ class _HomeListViewWidgetState extends State<HomeListViewWidget> {
                         SizedBox(height:4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
+                          children: <Widget>[
                             Text('${document['category']}',style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300)),
-                            Container(
-                              padding: EdgeInsets.fromLTRB(10, 7, 10, 7),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.black12, width: 2),
+                            if('${document['status']}' == '모집완료')
+                              Container(
+                                padding: EdgeInsets.fromLTRB(10, 7, 10, 7),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[350],
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: Colors.grey[400], width: 2),
+                                ),
+                                child: Text('${document['status']}'),
+                              ) 
+                            else
+                              Container(
+                                padding: EdgeInsets.fromLTRB(10, 7, 10, 7),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: Colors.black12, width: 2),
+                                ),
+                                child: Text('${document['status']}'),
                               ),
-                              child: Text('${document['status']}'),
-                            ),
                           ],                        
                         ),
                       ],

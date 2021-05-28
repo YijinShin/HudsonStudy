@@ -79,6 +79,9 @@ class _AlarmListViewWidgetState extends State<AlarmListViewWidget> {
                           StreamBuilder(
                             stream: userRef.doc('${document['applicant']}').snapshots(),
                             builder: (context,snapshot){
+                              if(!snapshot.hasData){
+                                return Center(child: Text('There are no studies.\nCreate a new study!',style: TextStyle(color: Colors.grey)));
+                              }
                               return Text(
                                 '${snapshot.data['firstName']}  ${snapshot.data['sureName']} 님이 스터디 신청을 했습니다!',
                                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
