@@ -60,6 +60,7 @@ class _MemberDrawerWidgetState extends State<MemberDrawerWidget> {
               onPressed: () {
                 //delete member
                 widget.deleteMember('${widget.studyName}',memberId );
+                Navigator.pop(context);
               },
             ),
           ],
@@ -100,9 +101,9 @@ class _MemberDrawerWidgetState extends State<MemberDrawerWidget> {
                   return GestureDetector(
                     onTap:(){
                       setState(() {
-                        print('member >> ${document['userId']}');
-                        _deleteDialog('${document['userId']}');
-                        print('hello');
+                        if(!document['master']){
+                          _deleteDialog('${document['userId']}');
+                        }
                       });
                     },
                     child: Container(

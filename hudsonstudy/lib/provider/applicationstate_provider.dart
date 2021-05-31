@@ -266,6 +266,7 @@ class ApplicationStateProvider extends ChangeNotifier{
         firstName = document.data()['firstName'];
         sureName = document.data()['sureName'];
         major = document.data()['major'];
+        userId = document.data()['userId'];
       });
       await studyRef.doc('$studyName').collection('member').doc('$userId').set({
         'contect' : contect,
@@ -273,6 +274,7 @@ class ApplicationStateProvider extends ChangeNotifier{
         'sureName' : sureName,
         'major': major,
         'master': false,
+        'userId' : userId,
       });
   }
 
@@ -316,7 +318,6 @@ class ApplicationStateProvider extends ChangeNotifier{
           'status' : '모집중'
         });
     }
-
     //appUser > myStudy에서 study지우기 
     await myStudyRef.where('name', isEqualTo: '$studyName').get().then((snapshot){
       for(DocumentSnapshot document in snapshot.docs){
