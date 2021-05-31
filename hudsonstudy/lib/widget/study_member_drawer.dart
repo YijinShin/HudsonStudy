@@ -72,6 +72,8 @@ class _MemberDrawerWidgetState extends State<MemberDrawerWidget> {
   @override
   Widget build(BuildContext context) {
     CollectionReference ref = FirebaseFirestore.instance.collection('study').doc('${widget.studyName}').collection('member');
+    String currentUserEmail = FirebaseAuth.instance.currentUser.email;
+    var currentUserRef = FirebaseFirestore.instance.collection('appUser').doc('${currentUserEmail}').collection('myStudy');
     return Drawer(
       child: ListView(
         children: [
@@ -100,10 +102,15 @@ class _MemberDrawerWidgetState extends State<MemberDrawerWidget> {
                 children: snapshot.data.docs.map<Widget>((document){
                   return GestureDetector(
                     onTap:(){
-                      setState(() {
-                        if(!document['master']){
-                          _deleteDialog('${document['userId']}');
-                        }
+                      setState(() async{
+                        //스터디의 마스터에게만 삭제 권한 부여 
+                        await currentUserRef.doc('${widget.studyName}').get().then((value){
+                          if(value['master']){
+                            if(!document['master']){
+                              _deleteDialog('${document['userId']}');
+                            }
+                          } 
+                        });
                       });
                     },
                     child: Container(
