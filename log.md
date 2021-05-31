@@ -60,3 +60,12 @@ todo
   - study edit하고 save 버튼 누르면 '스터디가 수정되었습니다.' 알림 띄우기
   - profile edit 하고 save 버튼 누르면 '프로필이 수정되었습니다.' 알림 띄우기
   - study apply 버튼 누르면 '스터디에 신청서를 넣었습니다.' 알림 띄우기 (구현은 되어있는데 디자인 통일하기)
+
+# 5.31
+ 
+  log
+  - delete member 기능 구현.
+  
+  todo
+  - delete 는 master만 가능하도록 권한 막기 
+  
