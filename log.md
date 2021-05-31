@@ -65,7 +65,8 @@ todo
  
   log
   - delete member 기능 구현.
+  - delete 는 master만 가능하도록 권한 막기 
   
   todo
-  - delete 는 master만 가능하도록 권한 막기 
+
   
