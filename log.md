@@ -81,8 +81,11 @@ todo
  log
  - home_widget, profile_page에 user major 오류 수정
  - edit_profile_page user name, major 오류 수정
+ - edit study 오류 수정(textformfield에서 input이 업데이트 되지 않는 문제 해결)
   
  todo
+ - profile edit에서 major update 문제 해결
+ - 스터디 신청자에게 alarm 가도록 수정 
 
 
   
