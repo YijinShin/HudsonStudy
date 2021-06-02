@@ -68,5 +68,13 @@ todo
   - delete 는 master만 가능하도록 권한 막기 
   
   todo
+  
+ # 5.31
+ 
+ log
+ - study create 버튼 누르면 알림창 띄우기 
+  
+ todo
+
 
   
