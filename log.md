@@ -86,6 +86,8 @@ todo
  todo
  - profile edit에서 major update 문제 해결
  - 스터디 신청자에게 alarm 가도록 수정 
+ - home study list : search 정렬 하기 https://blog.usejournal.com/flutter-search-in-listview-1ffa40956685
+ 
 
 
   
