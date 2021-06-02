@@ -75,6 +75,13 @@ todo
  - study create 버튼 누르면 알림창 띄우기 
   
  todo
+ 
+ # 6.3
+ 
+ log
+ - home_widget, profile_page에 user major 오류 수정
+  
+ todo
 
 
   
