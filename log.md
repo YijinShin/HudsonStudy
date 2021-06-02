@@ -80,6 +80,7 @@ todo
  
  log
  - home_widget, profile_page에 user major 오류 수정
+ - edit_profile_page user name, major 오류 수정
   
  todo
 
