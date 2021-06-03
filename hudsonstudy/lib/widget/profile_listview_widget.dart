@@ -45,7 +45,8 @@ class _ProfileViewWidgetState extends State<ProfileViewWidget> {
                           return Consumer<ApplicationStateProvider>(
                             builder:(context, appState, _) => MyStudyDetailPage(
                               studyName: "${document['name']}",
-                              checkMaster: (String studyName) => appState.checkMasterUser(studyName)
+                              checkMaster: (String studyName) => appState.checkMasterUser(studyName),
+                              deleteStudy: (String studyName) => appState.deleteStudy(studyName),
                             )
                           );
                         } 

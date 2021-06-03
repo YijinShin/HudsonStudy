@@ -218,6 +218,83 @@ class ApplicationStateProvider extends ChangeNotifier{
     });
   }
 
+  //add application alarm
+  Future<DocumentReference> addApplicationToAlarm (String studyName)async{
+    if (_loginState != ApplicationLoginState.loggedIn) {
+        throw Exception('Must be logged in');
+    }
+    final studyRef = FirebaseFirestore.instance.collection('study');
+    //get current user id (신청자)
+    String currentUserEmail = FirebaseAuth.instance.currentUser.email;
+    //get study master id (마스터 )
+    String master;
+    await studyRef.doc('$studyName').get().then((document) => master = document['master']);
+    final applicantUserAlarmRef = FirebaseFirestore.instance.collection('appUser').doc('$currentUserEmail').collection('alarm');
+    final masterUserAlarmRef = FirebaseFirestore.instance.collection('appUser').doc('$master').collection('alarm');
+    //add apply alarm to 신청자 
+    applicantUserAlarmRef.add({
+      'type' : 'apply',
+      'studyName' : studyName,
+      'applicant' : currentUserEmail,
+      'master' : master,
+    });
+    //add alarm to 마스터  
+    masterUserAlarmRef.add({
+      'type' : 'application',
+      'studyName' : studyName,
+      'applicant' : currentUserEmail,
+      'master' : master,
+    });
+  }
+
+  //if master accept application) delete application + add accept alarm 
+  Future<DocumentReference> updateAcceptAlarm (String userId, String studyName)async{
+    final ref = FirebaseFirestore.instance.collection('application');
+    final studyRef = FirebaseFirestore.instance.collection('study');
+    String currentUserEmail = FirebaseAuth.instance.currentUser.email;
+    final applicantUserAlarmRef = FirebaseFirestore.instance.collection('appUser').doc('$userId').collection('alarm');
+    final masterUserAlarmRef = FirebaseFirestore.instance.collection('appUser').doc('$currentUserEmail').collection('alarm');
+
+    //delete applicaiton alarm from master.alarm
+    await masterUserAlarmRef.where('studyName', isEqualTo: '$studyName')
+      .where('applicant', isEqualTo: '$userId').get().then((snapshot){
+        for(DocumentSnapshot document in snapshot.docs){
+          document.reference.delete();
+        }
+    });
+    //add accept alarm to applicant
+    applicantUserAlarmRef.add({
+      'type' : 'accept',
+      'studyName' : studyName,
+      'applicant' : currentUserEmail,
+      'master' : currentUserEmail,
+    }); 
+  }
+  
+  //if master accept application) delete application + add accept alarm 
+  Future<DocumentReference> updateRejectAlarm (String userId, String studyName)async{
+    final ref = FirebaseFirestore.instance.collection('application');
+    String currentUserEmail = FirebaseAuth.instance.currentUser.email;
+    final applicantUserAlarmRef = FirebaseFirestore.instance.collection('appUser').doc('$userId').collection('alarm');
+    final masterUserAlarmRef = FirebaseFirestore.instance.collection('appUser').doc('$currentUserEmail').collection('alarm');
+
+    //delete applicaiton alarm from master.alarm
+    await masterUserAlarmRef.where('studyName', isEqualTo: '$studyName')
+      .where('applicant', isEqualTo: '$userId').get().then((snapshot){
+        for(DocumentSnapshot document in snapshot.docs){
+          document.reference.delete();
+        }
+    });
+    //add accept alarm to applicant
+    applicantUserAlarmRef.add({
+      'type' : 'reject',
+      'studyName' : studyName,
+      'applicant' : currentUserEmail,
+      'master' : currentUserEmail,
+    }); 
+  }
+  
+
   //add study to myStudy in appUser
   Future<DocumentReference> addStudyToMyStudy (String userId, String studyName)async{
     final userRef = FirebaseFirestore.instance.collection('appUser'); 
@@ -324,8 +401,31 @@ class ApplicationStateProvider extends ChangeNotifier{
           document.reference.delete();
         }
     });
-
   }
+
+  Future<DocumentReference> deleteStudy (String studyName) async{
+    
+    final studyRef = FirebaseFirestore.instance.collection('study');
+    final memberRef = studyRef.doc('$studyName').collection('member');
+    final appUserRef = FirebaseFirestore.instance.collection('appUser');
+    final myStudyRef = FirebaseFirestore.instance.collectionGroup('myStudy');
+
+    //member의 appUser > myStudy에서 스터디 삭제
+    await myStudyRef.where('name', isEqualTo: '$studyName').get().then((snapshot){
+      for(DocumentSnapshot document in snapshot.docs){
+          document.reference.delete();
+        }
+    });
+    //study document의 member collection 문서 삭제
+    await memberRef.get().then((snapshot){
+       for(DocumentSnapshot document in snapshot.docs){
+          document.reference.delete();
+        }
+    });
+    //study collection에서 study document 삭제
+    await studyRef.doc('$studyName').delete();
+  }
+
 
   //edit appUser Info 
   Future<dynamic> updateAppUser(String firstName, String sureName, String major, String contect)async{

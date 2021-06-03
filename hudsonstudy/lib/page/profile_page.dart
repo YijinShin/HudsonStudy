@@ -33,7 +33,8 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white10,
-        //title: Text('My page',style: TextStyle(color: Colors.black),),
+        centerTitle: true,
+        //title: Text('My Page', style: TextStyle(color: Colors.black)),
         leading: BackButton(color: Colors.black),
         elevation: 0.0,
         actions: [
@@ -107,7 +108,16 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ],
                     ),
-                    Text('Computer Science',style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300)),
+                    StreamBuilder(
+                      stream: appUserRef.doc('$currentUserEmail').snapshots(),
+                      builder: (context, snapshot){
+                        if(!snapshot.hasData) return Container(width:10);
+                          return Text(
+                            '${snapshot.data['major']}',
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                          );
+                      },
+                    ), 
                   ],
                 ),
               ],

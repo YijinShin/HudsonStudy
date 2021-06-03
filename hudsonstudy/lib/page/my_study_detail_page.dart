@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 //provider
 import 'package:hudsonstudy/provider/applicationstate_provider.dart';
 //page
-import 'package:hudsonstudy/page/edit_study_page.dart';
+import 'package:hudsonstudy/page/edit_study_page2.dart';
 //widget
 import 'package:hudsonstudy/widget/study_member_drawer.dart';
 
@@ -14,10 +14,12 @@ class MyStudyDetailPage extends StatefulWidget {
 
   MyStudyDetailPage({
     @required this.studyName,
-    @required this.checkMaster
+    @required this.checkMaster,
+    @required this.deleteStudy
   });
   final String studyName;
   final Future<String> Function(String name) checkMaster;
+  final Future<void> Function(String studyName) deleteStudy;
 
   @override
   _MyStudyDetailPageState createState() => _MyStudyDetailPageState();
@@ -29,6 +31,51 @@ class _MyStudyDetailPageState extends State<MyStudyDetailPage> {
   String category, introduction, name, password, status, when, rules;
   bool isPrivite;
   int maxMemNumber;
+
+  void _deleteDialog() { 
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          title: Center(
+            child: Text(
+              "잠깐!",
+              //style: TextStyle(color: Colors.orange[600]),
+            )
+          ),
+          content: Text("정말 스터디를 삭제하시겠습니까?"),
+          actions: <Widget>[ 
+            FlatButton(
+              color: Colors.orange[600],
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              child: Text(
+                "아니오",
+                style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              color: Colors.orange[600],
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              child: new Text(
+                "확인",
+                style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+              ),
+              onPressed: () {
+                //delete study
+                widget.deleteStudy('${widget.studyName}');
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,47 +146,6 @@ class _MyStudyDetailPageState extends State<MyStudyDetailPage> {
                             ),
                           ],
                         ),
-                      ),
-                      //master만 edit가능하게 고쳐야함. 
-                      FutureBuilder(
-                        future: widget.checkMaster('${widget.studyName}'),
-                        builder: (context, snapshot){
-                          if(snapshot.data.toString()  == 'true'){
-                            return  Container(
-                              margin: EdgeInsets.fromLTRB(0, 0, 30, 0),
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                                color: Colors.black,
-                                child: Text('Edit',style: TextStyle(color: Colors.white),),
-                                onPressed: () {  
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context){
-                                        return Consumer<ApplicationStateProvider>(
-                                          builder:(context, appState, _) => EditStudyPage(
-                                            category:category,
-                                            introduction:introduction,
-                                            isPrivite:isPrivite,
-                                            maxMemNumber:maxMemNumber,
-                                            name:name,
-                                            password:password,
-                                            status:status,
-                                            when:when,
-                                            rules:rules,
-                                            updateStudy: (String category, String introduction, bool isPrivite, int maxMemNumber
-                                                , String studyName, String password, String rule, String status, String when) => appState.updateStudy(category, introduction, isPrivite, maxMemNumber, studyName, password, rule, status, when)
-                                          )
-                                        );
-                                      } 
-                                    )
-                                  );
-                                },
-                              ),
-                            );
-                          }
-                          else return SizedBox(width:10);
-                        }
                       ),
                     ],
                   ),
@@ -265,6 +271,63 @@ class _MyStudyDetailPageState extends State<MyStudyDetailPage> {
                     ),
                   ),
                   SizedBox(height: 40),
+                  //master만 edit가능하게 고쳐야함. 
+                      FutureBuilder(
+                        future: widget.checkMaster('${widget.studyName}'),
+                        builder: (context, snapshot){
+                          if(snapshot.data.toString()  == 'true'){
+                            return  Container(
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.fromLTRB(0, 0, 30, 0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  RaisedButton(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                                    color: Colors.black,
+                                    child: Text('Delete',style: TextStyle(color: Colors.white),),
+                                    onPressed: () {  
+                                      _deleteDialog();
+                                    },
+                                  ),
+                                  RaisedButton(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                                    color: Colors.black,
+                                    child: Text('Edit',style: TextStyle(color: Colors.white),),
+                                    onPressed: () {  
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context){
+                                            return Consumer<ApplicationStateProvider>(
+                                              builder:(context, appState, _) => EditStudyPage2(
+                                                category:category,
+                                                introduction:introduction,
+                                                isPrivite:isPrivite,
+                                                maxMemNumber:maxMemNumber,
+                                                name:name,
+                                                password:password,
+                                                status:status,
+                                                when:when,
+                                                rules:rules,
+                                                updateStudy: (String category, String introduction, bool isPrivite, int maxMemNumber
+                                                    , String studyName, String password, String rule, String status, String when) => appState.updateStudy(category, introduction, isPrivite, maxMemNumber, studyName, password, rule, status, when)
+                                              )
+                                            );
+                                          } 
+                                        )
+                                      );
+                                    },
+                                  ),
+                                ],
+                              )
+                            );
+                          }
+                          else return SizedBox(width:10);
+                        }
+                      ),
+                      SizedBox(height: 20),
                 ]
               ),
             ),

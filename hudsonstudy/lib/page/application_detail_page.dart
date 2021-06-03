@@ -8,13 +8,17 @@ class ApplicationDetailPage extends StatefulWidget {
     @required this.studyName,
     @required this.addMyStudy,
     @required this.addMember,
-    @required this.deleteApplication
+    @required this.deleteApplication,
+    @required this.updateAcceptAlarm,
+    @required this.updateRejectAlarm
   });
   final String applicant;
   final String studyName;
   final Future<void> Function(String userId, String studyName) addMyStudy;
   final Future<void> Function(String userId, String studyName) addMember;
   final Future<void> Function(String userId, String studyName) deleteApplication;
+  final Future<void> Function(String userId, String studyName) updateAcceptAlarm;
+  final Future<void> Function(String userId, String studyName) updateRejectAlarm;
 
   @override
   _ApplicationDetailPageState createState() => _ApplicationDetailPageState();
@@ -145,7 +149,7 @@ class _ApplicationDetailPageState extends State<ApplicationDetailPage> {
                     child: Text('Reject',style: TextStyle(color: Colors.black, fontWeight: FontWeight.w300)),
                     onPressed: (){
                       //application에서 지우기
-                      widget.deleteApplication('${widget.applicant}', '${widget.studyName}');
+                      widget.updateRejectAlarm('${widget.applicant}', '${widget.studyName}');
                       //applicant한테 알림주기
                       //home_widget으로 돌아가기 
                        Navigator.pop(context);
@@ -165,7 +169,7 @@ class _ApplicationDetailPageState extends State<ApplicationDetailPage> {
                       //appUser > myStudy에 데이터 추가 
                       widget.addMyStudy('${widget.applicant}', '${widget.studyName}');
                       //application에서 지우기
-                      widget.deleteApplication('${widget.applicant}', '${widget.studyName}');
+                      widget.updateAcceptAlarm('${widget.applicant}', '${widget.studyName}');
                       //applicant한테 알림주기
                       //home_widget으로 돌아가기 
                        Navigator.pop(context);

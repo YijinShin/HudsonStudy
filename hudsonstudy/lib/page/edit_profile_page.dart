@@ -47,13 +47,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-      final _firstNameController = TextEditingController(text: "${widget.firstName}");
-      final _sureNameController = TextEditingController(text: "${widget.sureName}");
-      final _contectController = TextEditingController(text: "${widget.contect}");
-      String selectedMajor = "${widget.major}";
-      //print('selected : $selectedMajor');
-      //String selectedMajor = 'None';
-      String firstName, sureName, contect, major;
+    final appUserRef = FirebaseFirestore.instance.collection('appUser');
+    String currentUserEmail = FirebaseAuth.instance.currentUser.email;
+  
+    final _firstNameController = TextEditingController(text: "${widget.firstName}");
+    final _sureNameController = TextEditingController(text: "${widget.sureName}");
+    final _contectController = TextEditingController(text: "${widget.contect}");
+    //var selectedMajor = "${widget.major}";
+    var selectedMajor = 'Computure Science';
+    String firstName, sureName, contect, major;
 
 
     final _formKey = GlobalKey<FormState>(debugLabel: '_EditProfilePageState');
@@ -83,10 +85,28 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text('Yijin ',style: TextStyle(fontSize: 40, fontWeight: FontWeight.w400)),
+                        StreamBuilder(
+                          stream: appUserRef.doc('$currentUserEmail').snapshots(),
+                          builder: (context, snapshot){
+                            if(!snapshot.hasData) return Container(width:10);
+                            return Text(
+                              '${snapshot.data['firstName']} ${snapshot.data['sureName']}',
+                              style: TextStyle(fontSize: 40, fontWeight: FontWeight.w400)
+                            );
+                          },
+                        ), 
                       ],
                     ),
-                    Text('Computer Science',style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300)),
+                    StreamBuilder(
+                      stream: appUserRef.doc('$currentUserEmail').snapshots(),
+                      builder: (context, snapshot){
+                        if(!snapshot.hasData) return Container(width:10);
+                        return Text(
+                          '${snapshot.data['major']}',
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                        );
+                      },
+                    ), 
                   ],
                 ),
               ],
@@ -184,19 +204,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child: DropdownButtonHideUnderline(
                 child: DropdownButton(
                   value: selectedMajor,
-                  //elevation : 40,
                   items: _majorList.map(
                       (value){
-                        return DropdownMenuItem<String>(
+                        return DropdownMenuItem(
                           value: value,
                           child: Text(value),
                         );
                       }
                   ).toList(),
-                  onChanged: (String newValue){
+                  onChanged: (value){
                     setState((){
-                      selectedMajor = newValue;
-                      print('seleted major : $newValue');
+                      selectedMajor = value;
+                      print('seleted major : $value');
                     });
                   },
                 ),
@@ -249,9 +268,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         elevation:5.0,
                         child: Text('Edit',style: TextStyle(color: Colors.black),),
                         onPressed: () async{    
+
                           if (_formKey.currentState.validate()) {
                             //save edited info to structure
-                            print('new first name :${_firstNameController.text}');
+                            print('new first name :${selectedMajor}');
                             //update appUser
                             await widget.updateAppUser(_firstNameController.text, _sureNameController.text, selectedMajor, _contectController.text);
                             //controller clear

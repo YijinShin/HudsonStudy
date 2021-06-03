@@ -22,8 +22,16 @@ class HomeWidget extends StatefulWidget {
 class _HomeWidgetState extends State<HomeWidget> {
 
   final _searchController = TextEditingController();
+  bool _isSearching = false;
+  String _error;
+  //List<Repo> _results = List();
+  
   final appUserRef = FirebaseFirestore.instance.collection('appUser');
   String currentUserEmail = FirebaseAuth.instance.currentUser.email;
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +90,16 @@ class _HomeWidgetState extends State<HomeWidget> {
                         ),
                       ],
                     ),
-                    Text('Computer Science',style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300)),
+                    StreamBuilder(
+                      stream: appUserRef.doc('$currentUserEmail').snapshots(),
+                      builder: (context, snapshot){
+                        if(!snapshot.hasData) return Container(width:10);
+                          return Text(
+                            '${snapshot.data['major']}',
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                          );
+                      },
+                    ), 
                   ],
                 ),
               ],
@@ -95,6 +112,9 @@ class _HomeWidgetState extends State<HomeWidget> {
                     height: 50,
                     child: TextFormField(
                       style: TextStyle(fontSize: 16.0,fontWeight: FontWeight.w300),
+                      onChanged: (value){
+                        //filterSearchResults(value);
+                      },  
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,

@@ -24,9 +24,67 @@ class _CreateStudyPage2State extends State<CreateStudyPage2> {
   final _studyRuleController = TextEditingController();
   final _whenController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>(debugLabel: '_AddPage2State');
+  final _formKey = GlobalKey<FormState>(debugLabel: '_CreateStudyPage2State');
 
   bool isSwitched = false;
+
+  void _deleteDialog() { 
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          title: Center(
+            child: Text(
+              "잠깐!",
+              //style: TextStyle(color: Colors.orange[600]),
+            )
+          ),
+          content: Text("스터디를 만드시겠습니까?"),
+          actions: <Widget>[ 
+            FlatButton(
+              color: Colors.orange[600],
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              child: Text(
+                "아니오",
+                style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              color: Colors.orange[600],
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              child: new Text(
+                "확인",
+                style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+              ),
+              onPressed: () async{    
+                if (_formKey.currentState.validate()) {
+                  //save data to widget.newStudy
+                  widget.newStudy.rule = _studyRuleController.text;
+                  widget.newStudy.when = _whenController.text;
+                  widget.newStudy.password = _passwordController.text;
+                  //call adding function 
+                  await widget.addStudyToStudy(widget.newStudy);
+                  //controller clear
+                  _studyRuleController.clear();
+                  _whenController.clear();
+                  _passwordController.clear();
+                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
 
   @override
@@ -180,23 +238,8 @@ class _CreateStudyPage2State extends State<CreateStudyPage2> {
                         color: Colors.black,
                         elevation:4.0,
                         child: Text('Create!',style: TextStyle(color: Colors.white),),
-                        onPressed: () async{    
-                          if (_formKey.currentState.validate()) {
-                            //save data to widget.newStudy
-                            widget.newStudy.rule = _studyRuleController.text;
-                            widget.newStudy.when = _whenController.text;
-                            widget.newStudy.password = _passwordController.text;
-                            //call adding function 
-                            await widget.addStudyToStudy(widget.newStudy);
-                            //controller clear
-                            _studyRuleController.clear();
-                            _whenController.clear();
-                            _passwordController.clear();
-                          }
-                           Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
-                          );
+                        onPressed: () async{ 
+                          _deleteDialog();
                         },
                       ),
                     ),

@@ -43,7 +43,8 @@ class _HomeListViewWidgetState extends State<HomeListViewWidget> {
                             builder:(context, appState, _) => AllStudyDetailPage(
                               studyName: "${document['name']}",
                               checkMyStudy: (String studyName) => appState.checkMyStudy(studyName),
-                              addApplication: (String studyName) => appState.addApplicationToApplication(studyName),
+                              //addApplication: (String studyName) => appState.addApplicationToApplication(studyName),
+                              addApplication: (String studyName) => appState.addApplicationToAlarm(studyName),
                             )
                           );
                         } 
