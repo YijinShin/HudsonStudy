@@ -278,23 +278,29 @@ class _MyStudyDetailPageState extends State<MyStudyDetailPage> {
                           if(snapshot.data.toString()  == 'true'){
                             return  Container(
                               alignment: Alignment.center,
-                              margin: EdgeInsets.fromLTRB(0, 0, 30, 0),
+                              margin: EdgeInsets.fromLTRB(40, 0, 40, 10),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   RaisedButton(
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                                    color: Colors.black,
-                                    child: Text('Delete',style: TextStyle(color: Colors.white),),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(40),
+                                      side: BorderSide(color: Colors.black),
+                                    ),
+                                    color: Colors.white,
+                                    child: Text('Delete',style: TextStyle(color: Colors.black),),
                                     onPressed: () {  
                                       _deleteDialog();
                                     },
                                   ),
                                   RaisedButton(
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                                    color: Colors.black,
-                                    child: Text('Edit',style: TextStyle(color: Colors.white),),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(40),
+                                      side: BorderSide(color: Colors.black),
+                                    ),
+                                    color: Colors.white,
+                                    child: Text('Edit',style: TextStyle(color: Colors.black),),
                                     onPressed: () {  
                                       Navigator.push(
                                         context,

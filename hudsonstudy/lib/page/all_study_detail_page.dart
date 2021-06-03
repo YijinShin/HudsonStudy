@@ -21,18 +21,41 @@ class _AllStudyDetailPageState extends State<AllStudyDetailPage> {
 
   final ref = FirebaseFirestore.instance.collection('study');
   
-  void _showDialog() { 
+  void _applyDialog() { 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Alert Dialog title"),
-          content: new Text("Alert Dialog body"),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          title: Center(
+            child: Text(
+              "잠깐!",
+              //style: TextStyle(color: Colors.orange[600]),
+            )
+          ),
+          content: Text("스터디에 신청서를 제출하시겠습니까?"),
           actions: <Widget>[ 
-            new FlatButton(
-              child: new Text("Close"),
+            FlatButton(
+              color: Colors.orange[600],
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              child: Text(
+                "아니오",
+                style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+              ),
               onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              color: Colors.orange[600],
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              child: new Text(
+                "확인",
+                style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
+              ),
+              onPressed: () {
+                widget.addApplication('${widget.studyName}');
                 Navigator.pop(context);
               },
             ),
@@ -111,8 +134,8 @@ class _AllStudyDetailPageState extends State<AllStudyDetailPage> {
                                 color: Colors.black,
                                 child: Text('Apply',style: TextStyle(color: Colors.white),),
                                 onPressed: () {    
-                                  widget.addApplication('${widget.studyName}');
-                                  _showDialog();
+                                  //widget.addApplication('${widget.studyName}');
+                                  _applyDialog();
                                 },
                               ),
                             ); 
