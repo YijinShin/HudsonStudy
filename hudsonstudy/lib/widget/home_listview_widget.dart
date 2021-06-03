@@ -42,8 +42,8 @@ class _HomeListViewWidgetState extends State<HomeListViewWidget> {
                 return StreamBuilder(
                   stream: queryRef.doc('query').snapshots(),
                   builder: (context, snapshot){
-                    print(" list widget query : ${snapshot.data['query']}");
-                    if("${document['name']}".contains( '${snapshot.data['query']}')){
+                    if(!snapshot.hasData) return Container(); // 불러오는동안 에러 나는것 잡아주기 
+                    if("${document['name']}".contains( '${snapshot.data['query']}') || '${snapshot.data['query']}' == ' '){
                       return GestureDetector(
                           onTap: (){
                             Navigator.push(

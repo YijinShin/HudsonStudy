@@ -119,11 +119,15 @@ class _HomeWidgetState extends State<HomeWidget> {
                     child: TextField(
                       style: TextStyle(fontSize: 16.0,fontWeight: FontWeight.w300),
                       onChanged: (value){
+                        if('${_searchController.text}' == "") {
+                          widget.updateQuery(' ');
+                          print("query empty");
+                        }
+                        else widget.updateQuery(_searchController.text);
                         //filterSearchResults(value);
                         query = value;
                         //widget.updateQuery(query);
-                        print("query :$query"); 
-                        if('$query' =="") widget.updateQuery(".");
+                        print("query :${_searchController.text}"); 
                       },  
                       decoration: InputDecoration(
                         filled: true,
@@ -149,9 +153,12 @@ class _HomeWidgetState extends State<HomeWidget> {
                   child: IconButton(
                     icon: Icon(Icons.search_outlined), 
                     onPressed: (){
-                      widget.updateQuery(query);
-                      _searchController.clear();
-                      query = "";
+                      if('${_searchController.text}' == "") {
+                        widget.updateQuery(' ');
+                        print("query empty");
+                      }
+                      else widget.updateQuery(_searchController.text);
+                      //query = "";
                     }
                   ),
                 ),
