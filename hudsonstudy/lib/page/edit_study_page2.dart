@@ -35,6 +35,21 @@ class EditStudyPage2 extends StatefulWidget {
 }
 
 class _EditStudyPage2State extends State<EditStudyPage2> {
+
+  var _selectedCategory = 'Counseling Psychology';
+  final _categoryList = [
+    'etc',
+    'Computure Science',
+    'Life Science',
+    'Electrical Engineering',
+    'Mechanical Engineering',
+    'Counseling Psychology',
+    'Social Welfare',
+    'Communication Arts',
+    'Languages',
+    'Law',
+  ];
+  
   
   @override
   Widget build(BuildContext context) {
@@ -108,6 +123,38 @@ class _EditStudyPage2State extends State<EditStudyPage2> {
                     style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
                   ),
                 ),
+                Container(
+                    margin: EdgeInsets.fromLTRB(55, 10,55,0),
+                    padding: EdgeInsets.fromLTRB(20, 0,20,0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: Colors.black12, width: 2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 0.4,
+                          blurRadius: 2,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: DropdownButton(
+                      value: _selectedCategory,
+                      items: _categoryList.map((value){
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }
+                      ).toList(),
+                      onChanged: (value){
+                        setState(() {
+                          _selectedCategory = value;  
+                        });
+                      },
+                    ),
+                  ),
                 Container(
                   padding: EdgeInsets.fromLTRB(30, 0,30,0),
                   child: TextFormField(
@@ -222,7 +269,7 @@ class _EditStudyPage2State extends State<EditStudyPage2> {
                         onPressed: () async{    
                           if (_formKey.currentState.validate()) {
                             //call editing function 
-                            widget.updateStudy(_categoryController.text, _introductionController.text, false, int.tryParse( _maxMemNumberController.text), 
+                            widget.updateStudy(_selectedCategory, _introductionController.text, false, int.tryParse( _maxMemNumberController.text), 
                                  widget.name,'1111',_studyRuleController.text, '모집중',_whenController.text);
                             //controller clear
                             _categoryController.clear(); 

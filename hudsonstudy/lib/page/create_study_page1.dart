@@ -22,8 +22,30 @@ class _CreateStudyPage1State extends State<CreateStudyPage1> {
   
   NewStudy newStudy = new NewStudy();
 
+  
+  var _selectedCategory = 'Counseling Psychology';
+  final _categoryList = [
+    'etc',
+    'Computure Science',
+    'Life Science',
+    'Electrical Engineering',
+    'Mechanical Engineering',
+    'Counseling Psychology',
+    'Social Welfare',
+    'Communication Arts',
+    'Languages',
+    'Law',
+  ];
+  
+
   @override
   Widget build(BuildContext context) {
+    //initialize
+    _studyNameController.clear();
+    _memberNumberController.clear();
+    _categoryController.clear();
+    _introductionController.clear(); 
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -39,13 +61,6 @@ class _CreateStudyPage1State extends State<CreateStudyPage1> {
               children: <Widget> [
                 Image.asset('assets/studyDefaultImage.png',fit: BoxFit.fill),
                 Image.asset('assets/gradation1.png',fit: BoxFit.fill),
-                IconButton(
-                  color: Colors.white,
-                  icon: Icon(Icons.photo_camera),
-                  onPressed: (){
-                    print('image picker');
-                  },
-                )
               ],
             ),
           ),
@@ -126,28 +141,35 @@ class _CreateStudyPage1State extends State<CreateStudyPage1> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(30, 0,30,0),
-                    child: TextFormField(
-                      style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.w300),
-                      controller: _categoryController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter your message to continue';
+                    margin: EdgeInsets.fromLTRB(55, 10,55,0),
+                    padding: EdgeInsets.fromLTRB(20, 0,20,0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: Colors.black12, width: 2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 0.4,
+                          blurRadius: 2,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: DropdownButton(
+                      value: _selectedCategory,
+                      items: _categoryList.map((value){
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Text(value),
+                          );
                         }
-                        return null;
+                      ).toList(),
+                      onChanged: (value){
+                        setState(() {
+                          _selectedCategory = value;  
+                        });
                       },
-                      decoration: InputDecoration(
-                        fillColor: Colors.transparent,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(25.7),
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(25.7),
-                        ),
-                        filled: true, 
-                      ),
                     ),
                   ),
                   SizedBox(height: 20,),
@@ -197,14 +219,10 @@ class _CreateStudyPage1State extends State<CreateStudyPage1> {
                           if (_formKey.currentState.validate()) {
                             //save info to study model
                             newStudy.name = _studyNameController.text;
-                            newStudy.category = _categoryController.text;
+                            newStudy.category = _selectedCategory;
+                            //newStudy.category = _categoryController.text;
                             newStudy.maxMemNumber = int.parse(_memberNumberController.text);
                             newStudy.introduction = _introductionController.text;
-                            //controller clear
-                            _studyNameController.clear();
-                            _memberNumberController.clear();
-                            _categoryController.clear();
-                            _introductionController.clear(); 
                             //navigator
                             Navigator.push(
                               context,

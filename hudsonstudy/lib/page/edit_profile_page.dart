@@ -45,6 +45,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     'Law',
   ];
 
+  var selectedMajor = 'Computure Science';
+
   @override
   Widget build(BuildContext context) {
     final appUserRef = FirebaseFirestore.instance.collection('appUser');
@@ -54,7 +56,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final _sureNameController = TextEditingController(text: "${widget.sureName}");
     final _contectController = TextEditingController(text: "${widget.contect}");
     //var selectedMajor = "${widget.major}";
-    var selectedMajor = 'Computure Science';
+    //selectedMajor = 'Computure Science';
     String firstName, sureName, contect, major;
 
 
