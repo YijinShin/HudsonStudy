@@ -294,6 +294,26 @@ class ApplicationStateProvider extends ChangeNotifier{
     }); 
   }
   
+  Future<DocumentReference> updateQuery (String query)async{
+    final queryRef = FirebaseFirestore.instance.collection('query'); 
+    bool isDoc = true;
+    await queryRef.doc('$query').get().then((document){
+      if (document.exists) isDoc = true;
+      else isDoc = false;
+    });
+    //add user in appUser
+    if(!isDoc){
+      queryRef.doc('query').set({
+        'query' : query,      
+      });
+    }
+    else{
+      await queryRef.doc('$query').update({
+        'query' : query
+      });
+    }
+
+  }
 
   //add study to myStudy in appUser
   Future<DocumentReference> addStudyToMyStudy (String userId, String studyName)async{

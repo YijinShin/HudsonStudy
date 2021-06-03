@@ -24,7 +24,12 @@ class HomePage extends StatelessWidget {
             }
             //로그인을 완료했는지 확인. 끝난거면 snapshot data가 있을것. 그럼 home widget으로 넘어감.  
             else if(snapshot.hasData){
-              return HomeWidget();
+              return Consumer<ApplicationStateProvider>(
+                builder:(context, appState, _) => HomeWidget(
+                  updateQuery: (String query) => appState.updateQuery(query),
+                )
+              );
+              //HomeWidget();
             }
             //로그인 flow에 들어가지 않았다면. 즉, 아직 로그인을 해야하는 상황이면 signupwidget return 
             else{

@@ -28,7 +28,7 @@ class _CreateStudyPage2State extends State<CreateStudyPage2> {
 
   bool isSwitched = false;
 
-  void _deleteDialog() { 
+  void _createDialog() { 
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -73,7 +73,7 @@ class _CreateStudyPage2State extends State<CreateStudyPage2> {
                   _studyRuleController.clear();
                   _whenController.clear();
                   _passwordController.clear();
-                }
+                } 
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => HomePage()),
@@ -85,7 +85,6 @@ class _CreateStudyPage2State extends State<CreateStudyPage2> {
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -239,7 +238,7 @@ class _CreateStudyPage2State extends State<CreateStudyPage2> {
                         elevation:4.0,
                         child: Text('Create!',style: TextStyle(color: Colors.white),),
                         onPressed: () async{ 
-                          _deleteDialog();
+                          _createDialog();
                         },
                       ),
                     ),

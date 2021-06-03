@@ -13,8 +13,15 @@ import 'package:hudsonstudy/page/alarm_page.dart';
 //widget
 import 'package:hudsonstudy/widget/home_listview_widget.dart';
 
+var query ='';
 
 class HomeWidget extends StatefulWidget {
+
+  HomeWidget({
+    @required this.updateQuery,
+  });
+  final Future<void> Function(String query) updateQuery;
+
   @override
   _HomeWidgetState createState() => _HomeWidgetState();
 }
@@ -29,8 +36,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   final appUserRef = FirebaseFirestore.instance.collection('appUser');
   String currentUserEmail = FirebaseAuth.instance.currentUser.email;
 
-
-
+  //var query ='';
 
 
   @override
@@ -110,10 +116,14 @@ class _HomeWidgetState extends State<HomeWidget> {
                   child: Container(
                     padding: EdgeInsets.fromLTRB(35, 0, 10,10),
                     height: 50,
-                    child: TextFormField(
+                    child: TextField(
                       style: TextStyle(fontSize: 16.0,fontWeight: FontWeight.w300),
                       onChanged: (value){
                         //filterSearchResults(value);
+                        query = value;
+                        //widget.updateQuery(query);
+                        print("query :$query"); 
+                        if('$query' =="") widget.updateQuery(".");
                       },  
                       decoration: InputDecoration(
                         filled: true,
@@ -131,12 +141,6 @@ class _HomeWidgetState extends State<HomeWidget> {
                         ),
                       ),
                       controller: _searchController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter your message to continue';
-                        }
-                        return null;
-                      },
                     )
                   ),
                 ),
@@ -144,13 +148,26 @@ class _HomeWidgetState extends State<HomeWidget> {
                   padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
                   child: IconButton(
                     icon: Icon(Icons.search_outlined), 
-                    onPressed: (){}
+                    onPressed: (){
+                      widget.updateQuery(query);
+                      _searchController.clear();
+                      query = "";
+                    }
                   ),
                 ),
               ],
             ),
             //home_listview()
-            Expanded(child: HomeListViewWidget()),
+            Expanded(
+              /*              
+              child: Consumer<ApplicationStateProvider>(
+                builder:(context, appState, _) => HomeListViewWidget(
+                  query: query,
+                )
+              )
+              */
+              child: HomeListViewWidget()
+            ),
           ],
         )
       ),
