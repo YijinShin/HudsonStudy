@@ -56,6 +56,7 @@ class _AllStudyDetailPageState extends State<AllStudyDetailPage> {
               ),
               onPressed: () {
                 widget.addApplication('${widget.studyName}');
+                
                 Navigator.pop(context);
               },
             ),
