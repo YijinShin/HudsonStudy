@@ -87,9 +87,10 @@ todo
  - application은 master의 alarm collection으로 가도록 수정(application을 accept, reject하는데 문제 없음)
  - create study, edit study에 category 선택을 dropdownbutton으로 수정
  - edit profile에서 major update안되는 문제 해결
+ - list view search 구현완료(실시간 검색 가능)
  
  todo
- - home study list : search 정렬 하기 https://blog.usejournal.com/flutter-search-in-listview-1ffa40956685
+ - snak bar, dioalog 등 마무리 하기 
  
 
 
