@@ -82,7 +82,10 @@ todo
  - home_widget, profile_page에 user major 오류 수정
  - edit_profile_page user name, major 오류 수정
  - edit study 오류 수정(textformfield에서 input이 업데이트 되지 않는 문제 해결)
-  
+ - alarm의 데이터 베이스를 수정함. application collection을 없애고, 각 appUser에 하위 collection으로 alarm을 넣음. 
+ - apply, accept, reject알람이 신청자의 alarm collection으로 가도록 수정
+ - application은 master의 alarm collection으로 가도록 수정(application을 accept, reject하는데 문제 없음)
+ 
  todo
  - profile edit에서 major update 문제 해결
  - 스터디 신청자에게 alarm 가도록 수정 
